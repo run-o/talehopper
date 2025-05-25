@@ -1,0 +1,7 @@
+fastapi
+pydantic[email]
+pydantic-settings
+uvicorn
+python-multipart
+httpx
+openai
