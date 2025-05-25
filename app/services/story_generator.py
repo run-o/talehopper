@@ -62,7 +62,7 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
 
 
 async def llm_generate_story(request: StoryRequest) -> dict:
-    """ Call an LLM to generate structured recipes. """
+    """ Call an LLM to generate a Choose-your-own-adventure style story. """
     
     client = AsyncOpenAI(base_url=settings.LLM_API_URL, api_key=settings.LLM_API_KEY)
     

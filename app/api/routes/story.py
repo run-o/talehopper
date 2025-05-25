@@ -1,8 +1,7 @@
 import logging
-from typing import Annotated, Any
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from app import schemas
-from app.services.story_generator import llm_generate_story
+from app.services.story_generator import llm_generate_story, StoryGeneratorException
 
 logger = logging.getLogger(__name__)
 
@@ -20,18 +19,30 @@ async def generate_story(request: schemas.StoryRequest):
     In both cases, it returns the next paragraph of the story and a list of
     choices for the next step.
     """
-    prompt = request.prompt
-    history = request.history
-    choice = request.choice
     
-    # TODO: raise an error if:
-    # - if request.prompt is None
-    # - if request.choice is None and request.history is not empty
-    # - if request.choice is not None and request.history is empty
+    if request.history and not request.choice:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Story choice missing."
+        )    
+    if request.choice and not request.history:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Story history missing."
+        )
 
-    paragraph, choices = await llm_generate_story(request)
-    
+    try:
+        paragraph, choices = await llm_generate_story(request)
+    except StoryGeneratorException as exc:
+        logger.error(f"Story generation failed: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(exc)
+        )
+
+    history = request.history
     history.append(paragraph)
+    
     return schemas.StoryResponse(history=history, choices=choices)    
         
     
