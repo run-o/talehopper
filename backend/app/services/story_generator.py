@@ -18,6 +18,9 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
     instructions.append(
         f"Write a fun, engaging Choose-your-own-adventure style story for a {prompt.age}-year-old child in {prompt.language}."
     )
+    
+    # TODO: add prompt to control the story's length, maybe add a conditional prompt
+    # asking to end the story if it reaches a certain length, and not generate new choices.
 
     # Optional parameters
     if prompt.characters:
@@ -33,13 +36,13 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
     if prompt.prompt:
         instructions.append(f"The story should also follow this prompt: {prompt.prompt}")
 
-    instructions.append("")  # Spacer
+    instructions.append("")
 
     if history and choice:
         instructions.append("Here is the story so far:")
         for i, para in enumerate(history, 1):
             instructions.append(f"Part {i}: {para}")
-        instructions.append("")  # Spacer
+        instructions.append("")
 
         instructions.append((
             f"The child chose the following option for the next part of the story: '{choice}'."
@@ -57,7 +60,7 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
         "Only return the JSON object, do not include any additional text or formatting."
         "Example: {\"paragraph\": \"next paragraph\"', \"choices\": [\"Choice 1\", \"Choice 2\", \"Choice 3\"]}"
     ))
-
+    
     return "\n".join(instructions)
 
 
