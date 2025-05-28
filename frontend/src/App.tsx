@@ -84,6 +84,7 @@ function App() {
             onChoiceSelected={handleChoiceSelected}
             onRestart={handleRestart}
             isLoading={isLoading}
+            isStoryEnded={!!storyPrompt && storyHistory.length >= storyPrompt.length}
           />
         )}
         

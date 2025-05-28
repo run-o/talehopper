@@ -8,6 +8,7 @@ interface StoryDisplayProps {
   onChoiceSelected: (choice: string) => void;
   onRestart: () => void;
   isLoading: boolean;
+  isStoryEnded?: boolean;
 }
 
 const StoryDisplay: React.FC<StoryDisplayProps> = ({
@@ -16,6 +17,7 @@ const StoryDisplay: React.FC<StoryDisplayProps> = ({
   onChoiceSelected,
   onRestart,
   isLoading,
+  isStoryEnded = false,
 }) => {
   return (
     <div className="story-display">
@@ -25,7 +27,8 @@ const StoryDisplay: React.FC<StoryDisplayProps> = ({
         <ChoiceButtons 
           choices={choices} 
           onChoiceSelected={onChoiceSelected} 
-          disabled={isLoading} 
+          disabled={isLoading}
+          isStoryEnded={isStoryEnded}
         />
         
         <button 
