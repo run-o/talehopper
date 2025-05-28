@@ -58,16 +58,19 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
       <h2>Create a New Story</h2>
       <form onSubmit={handleSubmit} className="story-form">
         <div className="form-group">
-          <label htmlFor="age">Child's Age (1-12):</label>
-          <input
-            type="number"
-            id="age"
-            min="1"
-            max="12"
-            value={age}
-            onChange={(e) => setAge(Number(e.target.value))}
-            required
-          />
+            <label htmlFor="age">Child's Age (1-12):</label>
+            <select
+                id="age"
+                value={age}
+                onChange={(e) => setAge(Number(e.target.value))}
+                required
+            >
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
+                <option key={num} value={num}>
+                    {num}
+                </option>
+                ))}
+            </select>
         </div>
         
         <div className="form-group">
