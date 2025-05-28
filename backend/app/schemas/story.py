@@ -11,7 +11,7 @@ class Character(BaseModel):
 class StoryPrompt(BaseModel):
     age: int = Field(..., ge=1, le=12, description="Child's age in years (1-12)")
     language: Literal["english", "french"] = Field(..., description="Language")
-    length: int = Field(..., ge=1, le=60, description="Approximate story length in steps or minutes")
+    length: int = Field(..., ge=3, le=60, description="Approximate story length in steps or minutes")
     
     prompt: Optional[str] = Field(None, description="Optional custom prompt to guide the story")
     characters: Optional[List[Character]] = Field(None, description="Optional list of characters")

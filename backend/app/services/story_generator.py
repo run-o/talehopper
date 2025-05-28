@@ -18,9 +18,6 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
     instructions.append(
         f"Write a fun, engaging Choose-your-own-adventure style story for a {prompt.age}-year-old child in {prompt.language}."
     )
-    
-    # TODO: add prompt to control the story's length, maybe add a conditional prompt
-    # asking to end the story if it reaches a certain length, and not generate new choices.
 
     # Optional parameters
     if prompt.characters:
@@ -51,8 +48,16 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
 
     # Instruction to generate next part
     instructions.append("Now write the next paragraph of the story, only write one paragraph at a time.")
-    instructions.append("Then offer 2 or 3 engaging choices for what could happen next.")
-    instructions.append("Choices should be short descriptions and make sense with story.")
+    if len(history) < prompt.length - 1:
+        instructions.append("Then offer 2 or 3 engaging choices for what could happen next.")
+        instructions.append("Choices should be short descriptions and make sense with story.")
+    
+    if len(history) == prompt.length - 2:
+        instructions.append("The story is getting close to the end, so make sure to start wrapping it up.")
+    elif len(history) == prompt.length - 1:
+        instructions.append("The story has reached the desired length, so end it with a satisfying conclusion.")
+        instructions.append("Do not generate choices.")
+        
 
     instructions.append((
         "Format the response as a JSON object with a 'paragraph' field containing the generated story paragraph"
@@ -72,6 +77,8 @@ async def llm_generate_story(request: StoryRequest) -> dict:
     logger.info(f"Generating story based on story request: {request}")
     
     prompt = build_story_prompt(request.prompt, request.history, request.choice)
+    
+    logger.info(f"Generated prompt for LLM: {prompt}")
     
     try:
         response = await client.chat.completions.create(
