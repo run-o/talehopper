@@ -75,7 +75,7 @@ async def llm_generate_story(request: StoryRequest) -> dict:
     
     try:
         response = await client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=settings.LLM_MODEL,
             messages=[
                 {"role": "system", "content": "You are a children's storyteller."},
                 {"role": "user", "content": prompt}
