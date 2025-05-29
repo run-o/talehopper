@@ -189,41 +189,68 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
               type="text"
               value={characterName}
               onChange={(e) => setCharacterName(e.target.value)}
-              placeholder="Name"
+              placeholder="Character name"
             />
             <input
               type="text"
               value={characterType}
               onChange={(e) => setCharacterType(e.target.value)}
-              placeholder="Type"
+              placeholder="Character type (e.g., boy, girl, animal)"
             />
-            <select
-              value={characterGender || ""}
-              onChange={(e) => setCharacterGender(e.target.value as Character["gender"])}
-            >
-              <option value="">Gender (optional)</option>
-              <option value="Boy">Boy</option>
-              <option value="Girl">Girl</option>
-              <option value="Neutral">Neutral</option>
-            </select>
-            <select
-              value={characterPersonality || ""}
-              onChange={(e) => setCharacterPersonality(e.target.value as Character["personality"])}
-            >
-              <option value="">Personality (optional)</option>
-              <option value="Good">Good</option>
-              <option value="Bad">Bad</option>
-              <option value="Neutral">Neutral</option>
-              <option value="Kind">Kind</option>
-              <option value="Brave">Brave</option>
-              <option value="Helpful">Helpful</option>
-              <option value="Mean">Mean</option>
-              <option value="Selfish">Selfish</option>
-              <option value="Mischievous">Mischievous</option>
-              <option value="Cruel">Cruel</option>
-              <option value="Evil">Evil</option>
-              <option value="Heroic">Heroic</option>
-            </select>
+            
+            {/* Gender Dropdown with Free Text Option */}
+            <div className="dropdown-with-text">
+              <select
+                value={characterGender || ""}
+                onChange={(e) => setCharacterGender(e.target.value === "custom" ? "" : e.target.value as Character["gender"])}
+              >
+                <option value="">Select gender...</option>
+                <option value="Boy">Boy</option>
+                <option value="Girl">Girl</option>
+                <option value="Neutral">Neutral</option>
+                <option value="custom">Custom...</option>
+              </select>
+              {characterGender === "" && (
+                <input
+                  type="text"
+                  value={characterGender || ""}
+                  onChange={(e) => setCharacterGender(e.target.value)}
+                  placeholder="Enter custom gender"
+                />
+              )}
+            </div>
+
+            {/* Personality Dropdown with Free Text Option */}
+            <div className="dropdown-with-text">
+              <select
+                value={characterPersonality || ""}
+                onChange={(e) => setCharacterPersonality(e.target.value === "custom" ? "" : e.target.value as Character["personality"])}
+              >
+                <option value="">Select personality...</option>
+                <option value="Good">Good</option>
+                <option value="Bad">Bad</option>
+                <option value="Neutral">Neutral</option>
+                <option value="Kind">Kind</option>
+                <option value="Brave">Brave</option>
+                <option value="Helpful">Helpful</option>
+                <option value="Mean">Mean</option>
+                <option value="Selfish">Selfish</option>
+                <option value="Mischievous">Mischievous</option>
+                <option value="Cruel">Cruel</option>
+                <option value="Evil">Evil</option>
+                <option value="Heroic">Heroic</option>
+                <option value="custom">Custom...</option>
+              </select>
+              {characterPersonality === "" && (
+                <input
+                  type="text"
+                  value={characterPersonality || ""}
+                  onChange={(e) => setCharacterPersonality(e.target.value)}
+                  placeholder="Enter custom personality"
+                />
+              )}
+            </div>
+
             <button
               type="button"
               onClick={addCharacter}
