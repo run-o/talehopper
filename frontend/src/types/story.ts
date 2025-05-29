@@ -1,6 +1,8 @@
 export interface Character {
   name: string;
   type: string;
+  gender?: string;
+  personality?: string;
 }
 
 export interface StoryPrompt {

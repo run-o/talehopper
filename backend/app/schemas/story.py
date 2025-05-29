@@ -6,7 +6,8 @@ from pydantic import BaseModel, Field
 class Character(BaseModel):
     name: str
     type: str = Field(..., description="Type of character: 'boy', 'girl', 'animal' etc")
-
+    gender: Optional[Literal["Boy", "Girl", "Neutral"]] = None
+    personality: Optional[Literal["Good", "Bad", "Neutral", "Kind", "Brave", "Helpful", "Mean", "Selfish", "Mischievous", "Cruel", "Evil", "Heroic"]] = None
 
 class StoryPrompt(BaseModel):
     age: int = Field(..., ge=1, le=12, description="Child's age in years (1-12)")

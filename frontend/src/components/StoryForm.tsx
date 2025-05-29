@@ -21,12 +21,16 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [characterName, setCharacterName] = useState<string>("");
   const [characterType, setCharacterType] = useState<string>("");
+  const [characterGender, setCharacterGender] = useState<Character["gender"]>(undefined);
+  const [characterPersonality, setCharacterPersonality] = useState<Character["personality"]>(undefined);
 
   const addCharacter = () => {
-    if (characterName && characterType) {
-      setCharacters([...characters, { name: characterName, type: characterType }]);
+    if (characterName && characterType && characterGender && characterPersonality) {
+      setCharacters([...characters, { name: characterName, type: characterType, gender: characterGender, personality: characterPersonality }]);
       setCharacterName("");
       setCharacterType("");
+      setCharacterGender(undefined);
+      setCharacterPersonality(undefined);
     }
   };
 
@@ -179,34 +183,61 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
         
         <div className="form-group characters-section">
           <h3>Characters (optional)</h3>
-          
+
           <div className="character-inputs">
             <input
               type="text"
               value={characterName}
               onChange={(e) => setCharacterName(e.target.value)}
-              placeholder="Character name"
+              placeholder="Name"
             />
             <input
               type="text"
               value={characterType}
               onChange={(e) => setCharacterType(e.target.value)}
-              placeholder="Character type (e.g., boy, girl, animal)"
+              placeholder="Type"
             />
-            <button 
-              type="button" 
+            <select
+              value={characterGender || ""}
+              onChange={(e) => setCharacterGender(e.target.value as Character["gender"])}
+            >
+              <option value="">Gender (optional)</option>
+              <option value="Boy">Boy</option>
+              <option value="Girl">Girl</option>
+              <option value="Neutral">Neutral</option>
+            </select>
+            <select
+              value={characterPersonality || ""}
+              onChange={(e) => setCharacterPersonality(e.target.value as Character["personality"])}
+            >
+              <option value="">Personality (optional)</option>
+              <option value="Good">Good</option>
+              <option value="Bad">Bad</option>
+              <option value="Neutral">Neutral</option>
+              <option value="Kind">Kind</option>
+              <option value="Brave">Brave</option>
+              <option value="Helpful">Helpful</option>
+              <option value="Mean">Mean</option>
+              <option value="Selfish">Selfish</option>
+              <option value="Mischievous">Mischievous</option>
+              <option value="Cruel">Cruel</option>
+              <option value="Evil">Evil</option>
+              <option value="Heroic">Heroic</option>
+            </select>
+            <button
+              type="button"
               onClick={addCharacter}
               disabled={!characterName || !characterType}
             >
               Add
             </button>
           </div>
-          
+
           {characters.length > 0 && (
             <ul className="character-list">
               {characters.map((character, index) => (
                 <li key={index}>
-                  {character.name} ({character.type})
+                  {character.name} ({character.type}, {character.gender}, {character.personality})
                   <button type="button" onClick={() => removeCharacter(index)}>Remove</button>
                 </li>
               ))}
