@@ -5,32 +5,31 @@ from pydantic import BaseModel, Field
 
 class Character(BaseModel):
     name: str
-    type: str = Field(..., description="Type of character: 'boy', 'girl', 'animal' etc")
-    gender: Optional[Literal["Boy", "Girl", "Neutral"]] = None
-    personality: Optional[Literal["Good", "Bad", "Neutral", "Kind", "Brave", "Helpful", "Mean", "Selfish", "Mischievous", "Cruel", "Evil", "Heroic"]] = None
+    type: str = Field(..., description="Type of character: child, animal, dragon etc")
+    gender: Optional[str] = Field(None, description="Character's gender")
+    personality: Optional[str] = Field(None, description="Character's personality")
 
 class StoryPrompt(BaseModel):
     age: int = Field(..., ge=1, le=12, description="Child's age in years (1-12)")
     language: Literal["english", "french"] = Field(..., description="Language")
-    length: int = Field(..., ge=3, le=60, description="Approximate story length in steps or minutes")
+    length: int = Field(..., ge=3, le=60, description="Number of paragraphs in the story")
     
-    prompt: Optional[str] = Field(None, description="Optional custom prompt to guide the story")
-    characters: Optional[List[Character]] = Field(None, description="Optional list of characters")
-    environment: Optional[str] = Field(None, description="Optional environment setting, e.g., 'forest'")
-    theme: Optional[str] = Field(None, description="Optional story theme, e.g., 'fairies'")
+    prompt: Optional[str] = Field(None, description="Custom prompt to guide the story")
+    characters: Optional[List[Character]] = Field(None, description="List of characters")
+    environment: Optional[str] = Field(None, description="Environment setting: forest, space, ocean, etc")
+    theme: Optional[str] = Field(None, description="Story theme: friendship, magic, adventure, etc")
     
-    tone: Optional[Literal["friendly", "silly", "adventurous", "mysterious", "wholesome"]] = None
-    conflict_type: Optional[Literal["quest", "problem", "villain", "lost item"]] = None
-    ending_style: Optional[Literal["happy", "twist", "moral", "open"]] = None
+    tone: Optional[str] = Field(None, description="Tone: friendly, silly, adventurous, mysterious, wholesome, etc")
+    conflict_type: Optional[str] = Field(None, description="Conflict type: quest, problem, villain, lost item, etc")
+    ending_style: Optional[str] = Field(None, description="Ending style: happy, twist, moral, open")
     
 
 class StoryRequest(BaseModel):
     prompt: StoryPrompt
     history: List[str] = Field(default_factory=list, description="All previously generated story paragraphs")
-    choice: Optional[str] = Field(None, description="The reader's selected choice, if continuing")
+    choice: Optional[str] = Field(None, description="Reader's choice for the next step in the story")
 
     
 class StoryResponse(BaseModel):
-    #story_id: str = Field(..., description="Unique identifier for this story session")
     choices: List[str] = Field(..., description="List of options for the next step of the story")
     history: List[str] = Field(..., description="Ordered list of all story steps up to this point")

@@ -21,7 +21,12 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
 
     # Optional parameters
     if prompt.characters:
-        char_desc = ", ".join(f"{c.name} who is a {c.type}" for c in prompt.characters)
+        char_desc = ", ".join(
+            f"{c.name} who is a {c.type}"
+            + (f" with a {c.gender} gender" if c.gender else "")
+            + (f" and a {c.personality} personality" if c.personality else "")
+            for c in prompt.characters
+        )
         instructions.append(f"The story includes the following characters: {char_desc}.")
 
     if prompt.environment:
@@ -31,7 +36,16 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
         instructions.append(f"The theme of the story is: {prompt.theme}.")
 
     if prompt.prompt:
-        instructions.append(f"The story should also follow this prompt: {prompt.prompt}")
+        instructions.append(f"The story should also follow this prompt: '{prompt.prompt}'")
+        
+    if prompt.tone:
+        instructions.append(f"The story should have a {prompt.tone} tone.")
+        
+    if prompt.ending_style:
+        instructions.append(f"The story ending style should be: {prompt.ending_style} style.")
+        
+    if prompt.conflict_type:
+        instructions.append(f"The story should include a conflict of type: {prompt.conflict_type}.")
 
     instructions.append("")
 
@@ -50,7 +64,7 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
     instructions.append("Now write the next paragraph of the story, only write one paragraph at a time.")
     if len(history) < prompt.length - 1:
         instructions.append("Then offer 2 or 3 engaging choices for what could happen next.")
-        instructions.append("Choices should be short descriptions and make sense with story.")
+        instructions.append("Choices should be short descriptions and make sense with the story.")
     
     if len(history) == prompt.length - 2:
         instructions.append("The story is getting close to the end, so make sure to start wrapping it up.")
@@ -60,9 +74,9 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
         
 
     instructions.append((
-        "Format the response as a JSON object with a 'paragraph' field containing the generated story paragraph"
-        "and a 'choices' field containing the list of choices for the next step."
-        "Only return the JSON object, do not include any additional text or formatting."
+        "Format the response as a JSON object with a 'paragraph' field containing the generated story paragraph "
+        "and a 'choices' field containing the list of choices for the next step.\n"
+        "Only return the JSON object, do not include any additional text or formatting.\n"
         "Example: {\"paragraph\": \"next paragraph\"', \"choices\": [\"Choice 1\", \"Choice 2\", \"Choice 3\"]}"
     ))
     

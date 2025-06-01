@@ -137,48 +137,57 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
         
         <div className="form-group">
           <label htmlFor="tone">Tone (optional):</label>
-          <select
+          <input
+            type="text"
             id="tone"
+            list="tone-options"
             value={tone || ""}
             onChange={(e) => setTone(e.target.value as StoryPrompt["tone"] || undefined)}
-          >
-            <option value="">Select a tone...</option>
-            <option value="friendly">Friendly</option>
-            <option value="silly">Silly</option>
-            <option value="adventurous">Adventurous</option>
-            <option value="mysterious">Mysterious</option>
-            <option value="wholesome">Wholesome</option>
-          </select>
+            placeholder="Select or enter a tone..."
+          />
+          <datalist id="tone-options">
+            <option value="friendly" />
+            <option value="silly" />
+            <option value="adventurous" />
+            <option value="mysterious" />
+            <option value="wholesome" />
+          </datalist>
         </div>
         
         <div className="form-group">
           <label htmlFor="conflictType">Conflict Type (optional):</label>
-          <select
+          <input
+            type="text"
             id="conflictType"
+            list="conflict-options"
             value={conflictType || ""}
             onChange={(e) => setConflictType(e.target.value as StoryPrompt["conflict_type"] || undefined)}
-          >
-            <option value="">Select a conflict type...</option>
-            <option value="quest">Quest</option>
-            <option value="problem">Problem</option>
-            <option value="villain">Villain</option>
-            <option value="lost item">Lost Item</option>
-          </select>
+            placeholder="Select a conflict type..."
+          />
+          <datalist id="conflict-options">
+            <option value="quest" />
+            <option value="problem" />
+            <option value="villain" />
+            <option value="lost item" />
+          </datalist>
         </div>
         
         <div className="form-group">
           <label htmlFor="endingStyle">Ending Style (optional):</label>
-          <select
+          <input
+            type="text"
             id="endingStyle"
+            list="ending-options"
             value={endingStyle || ""}
             onChange={(e) => setEndingStyle(e.target.value as StoryPrompt["ending_style"] || undefined)}
-          >
-            <option value="">Select an ending style...</option>
-            <option value="happy">Happy</option>
-            <option value="twist">Twist</option>
-            <option value="moral">Moral</option>
-            <option value="open">Open</option>
-          </select>
+            placeholder="Select an ending style (happy, moral, etc)"
+          />
+          <datalist id="ending-options">
+            <option value="happy" />
+            <option value="twist" />
+            <option value="moral" />
+            <option value="open" />
+          </datalist>
         </div>
         
         <div className="form-group characters-section">
@@ -189,67 +198,53 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
               type="text"
               value={characterName}
               onChange={(e) => setCharacterName(e.target.value)}
-              placeholder="Character name"
+              placeholder="Name"
             />
             <input
               type="text"
               value={characterType}
               onChange={(e) => setCharacterType(e.target.value)}
-              placeholder="Character type (e.g., boy, girl, animal)"
+              placeholder="Type (child, animal, etc.)"
             />
             
-            {/* Gender Dropdown with Free Text Option */}
-            <div className="dropdown-with-text">
-              <select
-                value={characterGender || ""}
-                onChange={(e) => setCharacterGender(e.target.value === "custom" ? "" : e.target.value as Character["gender"])}
-              >
-                <option value="">Select gender...</option>
-                <option value="Boy">Boy</option>
-                <option value="Girl">Girl</option>
-                <option value="Neutral">Neutral</option>
-                <option value="custom">Custom...</option>
-              </select>
-              {characterGender === "" && (
-                <input
-                  type="text"
-                  value={characterGender || ""}
-                  onChange={(e) => setCharacterGender(e.target.value)}
-                  placeholder="Enter custom gender"
-                />
-              )}
-            </div>
+            {/* Gender with Datalist */}
+            <input
+              type="text"
+              id="characterGender"
+              list="gender-options"
+              value={characterGender || ""}
+              onChange={(e) => setCharacterGender(e.target.value || undefined)}
+              placeholder="Gender (optional)"
+            />
+            <datalist id="gender-options">
+              <option value="Boy" />
+              <option value="Girl" />
+              <option value="Neutral" />
+            </datalist>
 
-            {/* Personality Dropdown with Free Text Option */}
-            <div className="dropdown-with-text">
-              <select
-                value={characterPersonality || ""}
-                onChange={(e) => setCharacterPersonality(e.target.value === "custom" ? "" : e.target.value as Character["personality"])}
-              >
-                <option value="">Select personality...</option>
-                <option value="Good">Good</option>
-                <option value="Bad">Bad</option>
-                <option value="Neutral">Neutral</option>
-                <option value="Kind">Kind</option>
-                <option value="Brave">Brave</option>
-                <option value="Helpful">Helpful</option>
-                <option value="Mean">Mean</option>
-                <option value="Selfish">Selfish</option>
-                <option value="Mischievous">Mischievous</option>
-                <option value="Cruel">Cruel</option>
-                <option value="Evil">Evil</option>
-                <option value="Heroic">Heroic</option>
-                <option value="custom">Custom...</option>
-              </select>
-              {characterPersonality === "" && (
-                <input
-                  type="text"
-                  value={characterPersonality || ""}
-                  onChange={(e) => setCharacterPersonality(e.target.value)}
-                  placeholder="Enter custom personality"
-                />
-              )}
-            </div>
+            {/* Personality with Datalist */}
+            <input
+              type="text"
+              id="characterPersonality"
+              list="personality-options"
+              value={characterPersonality || ""}
+              onChange={(e) => setCharacterPersonality(e.target.value || undefined)}
+              placeholder="Personality (optional)"
+            />
+            <datalist id="personality-options">
+              <option value="Good" />
+              <option value="Bad" />
+              <option value="Neutral" />
+              <option value="Kind" />
+              <option value="Brave" />
+              <option value="Helpful" />
+              <option value="Mean" />
+              <option value="Selfish" />
+              <option value="Mischievous" />
+              <option value="Cruel" />
+              <option value="Evil" />
+              <option value="Heroic" />
+            </datalist>
 
             <button
               type="button"
