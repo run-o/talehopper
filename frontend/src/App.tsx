@@ -12,6 +12,7 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isStoryStarted, setIsStoryStarted] = useState<boolean>(false);
+  const [lastChoice, setLastChoice] = useState<string | undefined>(undefined);
 
   const handleStartStory = async (prompt: StoryPrompt) => {
     setIsLoading(true);
@@ -28,6 +29,7 @@ function App() {
       setStoryHistory(response.history);
       setStoryChoices(response.choices);
       setIsStoryStarted(true);
+      setLastChoice(undefined);
     } catch (err) {
       setError('Failed to start story. Please try again.');
       console.error(err);
@@ -41,6 +43,7 @@ function App() {
     
     setIsLoading(true);
     setError(null);
+    setLastChoice(choice);
     
     try {
       const response = await generateStory({
@@ -59,12 +62,54 @@ function App() {
     }
   };
 
+  const handleRegenerateRequested = async () => {
+    if (!storyPrompt || storyHistory.length === 0) return;
+    
+    setIsLoading(true);
+    setError(null);
+    
+    // Remove the last paragraph from history
+    const previousHistory = storyHistory.length > 1 
+      ? storyHistory.slice(0, -1) 
+      : [];
+    
+    try {
+      // If this is the first paragraph, regenerate with empty history
+      if (previousHistory.length === 0) {
+        const response = await generateStory({
+          prompt: storyPrompt,
+          history: [],
+          choice: undefined,
+        });
+        
+        setStoryHistory(response.history);
+        setStoryChoices(response.choices);
+      } else {
+        // Otherwise regenerate with the previous history and last choice
+        const response = await generateStory({
+          prompt: storyPrompt,
+          history: previousHistory,
+          choice: lastChoice,
+        });
+        
+        setStoryHistory(response.history);
+        setStoryChoices(response.choices);
+      }
+    } catch (err) {
+      setError('Failed to regenerate story. Please try again.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleRestart = () => {
     setStoryPrompt(null);
     setStoryHistory([]);
     setStoryChoices([]);
     setIsStoryStarted(false);
     setError(null);
+    setLastChoice(undefined);
   };
 
   return (
@@ -83,6 +128,7 @@ function App() {
             choices={storyChoices}
             onChoiceSelected={handleChoiceSelected}
             onRestart={handleRestart}
+            onRegenerateRequested={handleRegenerateRequested}
             isLoading={isLoading}
             isStoryEnded={!!storyPrompt && storyHistory.length >= storyPrompt.length}
           />

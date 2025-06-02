@@ -7,6 +7,7 @@ interface StoryDisplayProps {
   choices: string[];
   onChoiceSelected: (choice: string) => void;
   onRestart: () => void;
+  onRegenerateRequested?: () => void;
   isLoading: boolean;
   isStoryEnded?: boolean;
 }
@@ -16,12 +17,17 @@ const StoryDisplay: React.FC<StoryDisplayProps> = ({
   choices,
   onChoiceSelected,
   onRestart,
+  onRegenerateRequested,
   isLoading,
   isStoryEnded = false,
 }) => {
   return (
     <div className="story-display">
-      <ParagraphList paragraphs={history} />
+      <ParagraphList 
+        paragraphs={history} 
+        onRegenerateRequested={onRegenerateRequested}
+        isLoading={isLoading}
+      />
       
       <div className="story-controls">
         <ChoiceButtons 
