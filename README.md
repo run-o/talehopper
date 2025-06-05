@@ -47,3 +47,8 @@ To set up the frontend, ensure you have the correct Node.js and npm versions ins
 - install Ollama: `brew install ollama`
 - start the server: `ollama serve`
 - pull desired model: `ollama pull mistral`
+
+### Huggingface LLM Setup
+
+- install transformers (this includes huggingface-hub): `pip install transformers`
+- download the desired model locally: `huggingface-cli download OpenLLM-France/Claire-Mistral-7B-0.1`

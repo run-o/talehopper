@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from app.api.main import api_router
+from app.services import story_generator
 
 
 logging.basicConfig(level=logging.INFO)
@@ -16,6 +17,7 @@ async def lifespan(app: FastAPI):
         should be executed before the application starts up and when the app
         is shutting down (potential cleanup steps).
     """
+    story_generator.initialize()
     yield
     # do cleanup here if necessary
 

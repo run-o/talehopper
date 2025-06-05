@@ -6,3 +6,6 @@ python-multipart
 httpx
 openai
 requests
+transformers
+torch
+happytransformer

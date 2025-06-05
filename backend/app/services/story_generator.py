@@ -1,17 +1,43 @@
 import logging
 import json
+import httpx
 import requests
+from fastapi.concurrency import run_in_threadpool
 from openai import AsyncOpenAI, OpenAIError
 from app.schemas import StoryRequest, StoryPrompt
 from app.core.config import settings
 from typing import List, Optional
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
 logger = logging.getLogger(__name__)
+
+
+# OpenAI parameters:
+openai_client = None
+# huggingface parameters:
+hf_pipeline = None
+
+LLM_SYSTEM_PROMPT = "You are a children's storyteller."
 
 class StoryGeneratorException(Exception):
     pass
 
-LLM_SYSTEM_PROMPT = "You are a children's storyteller."
+
+def initialize():
+    """ Initialize the LLMs and pipelines based on configuration. """
+    global openai_client
+    global hf_pipeline
+    
+    if settings.LLM_METHOD == "openai":
+        openai_client = AsyncOpenAI(
+            base_url=settings.LLM_OPENAI_API_URL,
+            api_key=settings.LLM_OPENAI_API_KEY
+        )
+    elif settings.LLM_METHOD == "huggingface":
+        hf_tokenizer = AutoTokenizer.from_pretrained(settings.LLM_HUGGINGFACE_MODEL)
+        hf_model = AutoModelForCausalLM.from_pretrained(settings.LLM_HUGGINGFACE_MODEL, device_map="auto")
+        hf_pipeline = pipeline("text-generation", model=hf_model, tokenizer=hf_tokenizer)
+
 
 def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional[str]) -> str:
     instructions = []
@@ -84,13 +110,13 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
     return "\n".join(instructions)
 
 
-async def llm_get_story_json_openAI(prompt) -> str:
-    client = AsyncOpenAI(
+async def llm_get_story_json_openai(prompt) -> str:
+    openai_client = AsyncOpenAI(
         base_url=settings.LLM_OPENAI_API_URL,
         api_key=settings.LLM_OPENAI_API_KEY
     )
     try:
-        response = await client.chat.completions.create(
+        response = await openai_client.chat.completions.create(
             model=settings.LLM_OPENAI_MODEL,
             messages=[
                 {"role": "system", "content": LLM_SYSTEM_PROMPT},
@@ -106,23 +132,44 @@ async def llm_get_story_json_openAI(prompt) -> str:
         raise StoryGeneratorException(f"Invalid LLM response: {str(exc)}")
     
 
-async def llm_get_story_json_ollama(prompt) -> str:
+async def llm_get_story_json_ollama(prompt: str) -> str:
     try:
-        response = requests.post(
-            settings.LLM_OLLAMA_API_URL,
-            json={
-                "model": settings.LLM_OLLAMA_MODEL,
-                "system": LLM_SYSTEM_PROMPT,
-                "prompt": prompt,
-                "stream": False
-            }
-        )
-        return response.json()["response"]
-    except requests.RequestException as exc:
-        raise StoryGeneratorException(f"Error calling ollama LLM: {str(exc)}")
-    except (KeyError, IndexError, AttributeError) as exc:
-        raise StoryGeneratorException(f"Invalid LLM response: {str(exc)}")  
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                settings.LLM_OLLAMA_API_URL,
+                json={
+                    "model": settings.LLM_OLLAMA_MODEL,
+                    "system": LLM_SYSTEM_PROMPT,
+                    "prompt": prompt,
+                    "stream": False
+                },
+                headers={"Content-Type": "application/json"},
+                timeout=60
+            )
+            response.raise_for_status()
+            return response.json()["response"]
+    except httpx.HTTPStatusError as exc:
+        raise StoryGeneratorException(f"HTTP error from Ollama LLM:: {str(exc)}")
+    except httpx.RequestError as exc:
+        raise StoryGeneratorException(f"Network error calling Ollama LLM: {str(exc)}")
+    except (KeyError, TypeError) as exc:
+        raise StoryGeneratorException(f"Invalid LLM response: {str(exc)}")
     
+    
+async def llm_get_story_json_huggingface(prompt) -> str:
+    try:
+        prompt = f"{LLM_SYSTEM_PROMPT}\n\n{prompt}"
+        result = await run_in_threadpool(
+            hf_pipeline,
+            prompt,
+            max_new_tokens=300,
+            temperature=0.8,
+            do_sample=True
+        )
+        return result[0]["generated_text"]
+    except Exception as exc:
+        raise StoryGeneratorException(f"Error calling HuggingFace LLM: {str(exc)}")
+        
 
 async def llm_generate_story(request: StoryRequest):
     """ Call an LLM to generate a Choose-your-own-adventure style story. """
@@ -133,15 +180,18 @@ async def llm_generate_story(request: StoryRequest):
     logger.info(f"Generated prompt for LLM: {prompt}")
     
     if settings.LLM_METHOD == "openai":
-        json_content = await llm_get_story_json_openAI(prompt)
+        json_content = await llm_get_story_json_openai(prompt)
     elif settings.LLM_METHOD == "ollama":
         json_content = await llm_get_story_json_ollama(prompt)
+    elif settings.LLM_METHOD == "huggingface":
+        json_content = await llm_get_story_json_huggingface(prompt)
     else:
         raise StoryGeneratorException(f"Unsupported LLM method: {settings.LLM_METHOD}") 
     
     try:
         # strip whitespace, backticks and quotes:
         json_content = json_content.strip().strip("`'\"")
+        print(f"LLM response content: {json_content}")
         story = json.loads(json_content)
     except json.JSONDecodeError as exc:
         logger.error(f"LLM response content: {json_content}")
