@@ -23,6 +23,11 @@ First install the required version of python as defined in the project (3.12.7) 
 
 Run the server with: `./run-server.sh`
 
+## API Documentation
+
+Docs provided via FastAPI:
+Run the server: `./run-server.sh` and go to http://localhost:8000/docs
+
 ## Frontend setup
 
 To set up the frontend, ensure you have the correct Node.js and npm versions installed, as these are required for compatibility with the project's dependencies:
@@ -31,3 +36,14 @@ To set up the frontend, ensure you have the correct Node.js and npm versions ins
 - upgrade npm if necessary: `npm install -g npm@11.4.1`
 - install dependencies: `npm install`
 - run the frontend with: `npm start`
+
+## Hosted LLM setup
+
+- create an account with OpenAI API compatible LLM (eg Groq)
+- retrieve the base URL and API key and add them under `LLM_OPENAI_API_URL` and `LLM_OPENAI_API_KEY` in `.env` file
+
+## Ollama LLM setup
+
+- install Ollama: `brew install ollama`
+- start the server: `ollama serve`
+- pull desired model: `ollama pull mistral`

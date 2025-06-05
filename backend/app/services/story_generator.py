@@ -1,5 +1,6 @@
 import logging
 import json
+import requests
 from openai import AsyncOpenAI, OpenAIError
 from app.schemas import StoryRequest, StoryPrompt
 from app.core.config import settings
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 class StoryGeneratorException(Exception):
     pass
 
-
+LLM_SYSTEM_PROMPT = "You are a children's storyteller."
 
 def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional[str]) -> str:
     instructions = []
@@ -83,22 +84,16 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
     return "\n".join(instructions)
 
 
-async def llm_generate_story(request: StoryRequest) -> dict:
-    """ Call an LLM to generate a Choose-your-own-adventure style story. """
-    
-    client = AsyncOpenAI(base_url=settings.LLM_API_URL, api_key=settings.LLM_API_KEY)
-    
-    logger.info(f"Generating story based on story request: {request}")
-    
-    prompt = build_story_prompt(request.prompt, request.history, request.choice)
-    
-    logger.info(f"Generated prompt for LLM: {prompt}")
-    
+async def llm_get_story_json_openAI(prompt) -> str:
+    client = AsyncOpenAI(
+        base_url=settings.LLM_OPENAI_API_URL,
+        api_key=settings.LLM_OPENAI_API_KEY
+    )
     try:
         response = await client.chat.completions.create(
-            model=settings.LLM_MODEL,
+            model=settings.LLM_OPENAI_MODEL,
             messages=[
-                {"role": "system", "content": "You are a children's storyteller."},
+                {"role": "system", "content": LLM_SYSTEM_PROMPT},
                 {"role": "user", "content": prompt}
             ]
         )
@@ -106,12 +101,50 @@ async def llm_generate_story(request: StoryRequest) -> dict:
         raise StoryGeneratorException(f"Error calling LLM API: {str(exc)}")
     
     try:
-        content = response.choices[0].message.content
-        print(f"LLM response: {content}")
-        # strip whitespace, backticks and quotes:
-        content = content.strip().strip("`'\"")
-        story = json.loads(content)
-    except (KeyError, IndexError, AttributeError, json.decoder.JSONDecodeError) as exc:
+        return response.choices[0].message.content
+    except (KeyError, IndexError, AttributeError) as exc:
         raise StoryGeneratorException(f"Invalid LLM response: {str(exc)}")
+    
+
+async def llm_get_story_json_ollama(prompt) -> str:
+    try:
+        response = requests.post(
+            settings.LLM_OLLAMA_API_URL,
+            json={
+                "model": settings.LLM_OLLAMA_MODEL,
+                "system": LLM_SYSTEM_PROMPT,
+                "prompt": prompt,
+                "stream": False
+            }
+        )
+        return response.json()["response"]
+    except requests.RequestException as exc:
+        raise StoryGeneratorException(f"Error calling ollama LLM: {str(exc)}")
+    except (KeyError, IndexError, AttributeError) as exc:
+        raise StoryGeneratorException(f"Invalid LLM response: {str(exc)}")  
+    
+
+async def llm_generate_story(request: StoryRequest):
+    """ Call an LLM to generate a Choose-your-own-adventure style story. """
+        
+    logger.info(f"Generating story based on story request: {request}")
+    
+    prompt = build_story_prompt(request.prompt, request.history, request.choice)
+    logger.info(f"Generated prompt for LLM: {prompt}")
+    
+    if settings.LLM_METHOD == "openai":
+        json_content = await llm_get_story_json_openAI(prompt)
+    elif settings.LLM_METHOD == "ollama":
+        json_content = await llm_get_story_json_ollama(prompt)
+    else:
+        raise StoryGeneratorException(f"Unsupported LLM method: {settings.LLM_METHOD}") 
+    
+    try:
+        # strip whitespace, backticks and quotes:
+        json_content = json_content.strip().strip("`'\"")
+        story = json.loads(json_content)
+    except json.JSONDecodeError as exc:
+        logger.error(f"LLM response content: {json_content}")
+        raise StoryGeneratorException(f"Invalid JSON from LLM: {str(exc)}")
     
     return story["paragraph"], story["choices"]

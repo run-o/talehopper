@@ -14,7 +14,7 @@ async def generate_story(request: schemas.StoryRequest):
     This endpoint is used to start a new story or continue an existing one:
     - if StoryRequest only contains a seed prompt, it starts a new story
     - if it contains a history of paragraphs and a choice,
-      it'll continue the existing story
+      it'll continue the existing story based on the selected choice
     
     In both cases, it returns the next paragraph of the story and a list of
     choices for the next step.
