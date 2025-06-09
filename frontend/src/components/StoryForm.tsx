@@ -25,8 +25,16 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
   const [characterPersonality, setCharacterPersonality] = useState<Character["personality"]>(undefined);
 
   const addCharacter = () => {
-    if (characterName && characterType && characterGender && characterPersonality) {
-      setCharacters([...characters, { name: characterName, type: characterType, gender: characterGender, personality: characterPersonality }]);
+    if (characterName && characterType) {
+      setCharacters([
+        ...characters,
+        {
+          name: characterName,
+          type: characterType,
+          gender: characterGender || undefined,
+          personality: characterPersonality || undefined,
+        },
+      ]);
       setCharacterName("");
       setCharacterType("");
       setCharacterGender(undefined);
@@ -255,16 +263,18 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
             </button>
           </div>
 
-          {characters.length > 0 && (
+            {characters.length > 0 && (
             <ul className="character-list">
               {characters.map((character, index) => (
-                <li key={index}>
-                  {character.name} ({character.type}, {character.gender}, {character.personality})
-                  <button type="button" onClick={() => removeCharacter(index)}>Remove</button>
-                </li>
+              <li key={index}>
+                {character.name} ({character.type}
+                {character.gender ? `, ${character.gender}` : ""}
+                {character.personality ? `, ${character.personality}` : ""})
+                <button type="button" onClick={() => removeCharacter(index)}>Remove</button>
+              </li>
               ))}
             </ul>
-          )}
+            )}
         </div>
         
         <button 
