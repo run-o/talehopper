@@ -78,7 +78,7 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
 
     if history and choice:
         instructions.append("Here is the story so far:")
-        for i, para in enumerate(history, 1):
+        for i, para in enumerate(history, start=1):
             instructions.append(f"Part {i}: {para}")
         instructions.append("")
 
@@ -111,10 +111,6 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
 
 
 async def llm_get_story_json_openai(prompt) -> str:
-    openai_client = AsyncOpenAI(
-        base_url=settings.LLM_OPENAI_API_URL,
-        api_key=settings.LLM_OPENAI_API_KEY
-    )
     try:
         response = await openai_client.chat.completions.create(
             model=settings.LLM_OPENAI_MODEL,
