@@ -89,6 +89,7 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
 
     # Instruction to generate next part
     instructions.append("Now write the next paragraph of the story, only write one paragraph at a time.")
+    instructions.append(f"The story should have a total of {prompt.length} paragraphs, so make sure to adjust the storyline and progression accordingly.")
     if len(history) < prompt.length - 1:
         instructions.append("Then offer 2 or 3 engaging choices for what could happen next.")
         instructions.append("Choices should be short descriptions and make sense with the story.")
