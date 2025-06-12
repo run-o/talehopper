@@ -28,6 +28,10 @@ Run the server with: `./run-server.sh`
 Docs provided via FastAPI:
 Run the server: `./run-server.sh` and go to http://localhost:8000/docs
 
+## Testing
+
+Run backend tests in the `/backend` folder: `python -m pytest`
+
 ## Frontend setup
 
 To set up the frontend, ensure you have the correct Node.js and npm versions installed, as these are required for compatibility with the project's dependencies:
