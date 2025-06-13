@@ -1,0 +1,17 @@
+FROM node:24.1.0-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy the rest of the frontend code
+COPY . ./
+
+# Expose port for development server
+EXPOSE 3000
+
+# Start development server with hot reloading
+CMD ["npm", "start"]
