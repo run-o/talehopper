@@ -6,7 +6,25 @@ TaleHopper gives the reader control over the storyline, both on the initial setu
 The backend is using FastAPI with Python and the frontend is using React with Typescript.
 
 
-## Backend setup
+## Docker Setup (Recommended)
+
+First make sure to create a `.env` file containing the config settings (LLM API key/URL, etc.) in the `/backend` folder of the project.
+You can use the provided [`.env.example`](backend/.env.example) file as a template.
+
+The easiest way to run TaleHopper is using Docker: `docker compose up -d`
+And then open a browser to: `http://localhost:3000/index.html`
+
+For more details on Docker setup, including development mode with hot-reloading, see [DOCKER.md](DOCKER.md).
+
+## API Documentation
+
+Docs provided via FastAPI: run the server and go to http://localhost:8000/docs
+
+## Manual Setup
+
+If you prefer to run the application without Docker, follow the instructions below.
+
+### Backend setup
 
 Make sure to create a `.env` file containing the config settings (LLM API key/URL, etc.) in the `/backend` folder of the project.
 You can use the provided [`.env.example`](backend/.env.example) file as a template.
@@ -23,16 +41,7 @@ First install the required version of python as defined in the project (3.12.7) 
 
 Run the server with: `./run-server.sh`
 
-## API Documentation
-
-Docs provided via FastAPI:
-Run the server: `./run-server.sh` and go to http://localhost:8000/docs
-
-## Testing
-
-Run backend tests in the `/backend` folder: `python -m pytest`
-
-## Frontend setup
+### Frontend setup
 
 To set up the frontend, ensure you have the correct Node.js and npm versions installed, as these are required for compatibility with the project's dependencies:
 - `nvm install 24.1.0`
@@ -41,12 +50,22 @@ To set up the frontend, ensure you have the correct Node.js and npm versions ins
 - install dependencies: `npm install`
 - run the frontend with: `npm start`
 
-## Hosted LLM setup
+## Testing
+
+If running manually, run backend tests in the `/backend` folder: `python -m pytest`
+
+If running in Docker: 
+`docker compose -f docker-compose.dev.yml exec backend python -m pytest`
+
+
+## LLM Configuration
+
+### Hosted LLM setup
 
 - create an account with OpenAI API compatible LLM (eg Groq)
 - retrieve the base URL and API key and add them under `LLM_OPENAI_API_URL` and `LLM_OPENAI_API_KEY` in `.env` file
 
-## Ollama LLM setup
+### Ollama LLM setup
 
 - install Ollama: `brew install ollama`
 - start the server: `ollama serve`
