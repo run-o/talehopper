@@ -1,7 +1,6 @@
 import logging
 import json
 import httpx
-import requests
 from fastapi.concurrency import run_in_threadpool
 from openai import AsyncOpenAI, OpenAIError
 from app.schemas import StoryRequest, StoryPrompt
