@@ -16,6 +16,8 @@ And then open a browser to: `http://localhost:3000/index.html`
 
 For more details on Docker setup, including development mode with hot-reloading, see [DOCKER.md](DOCKER.md).
 
+See the [`Makefile`](Makefile) for available commands.
+
 ## API Documentation
 
 Docs provided via FastAPI: run the server and go to http://localhost:8000/docs
