@@ -65,6 +65,13 @@ docker compose -f docker-compose.dev.yml run --rm --build backend python -m pyte
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
 
+## Developing inside the containers with VSCode
+
+- Install the Dev Containers extension in VSCode: `ms-vscode-remote.remote-containers`
+- Run command (Shift+Command+P): `Dev Containers: Reopen in Container`
+- This will start a VSCode session inside the container of choice (by default `backend` as specified in [`.devcontainer.json`](.devcontainer/devcontainer.json))
+
+
 ## Container Management
 
 List running containers:
