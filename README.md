@@ -52,6 +52,8 @@ To set up the frontend, ensure you have the correct Node.js and npm versions ins
 - install dependencies: `npm install`
 - run the frontend with: `npm start`
 
+- when deploying, set the REACT_APP_API_URL env variable to point to the backend service
+
 ## Testing
 
 If running manually, run backend tests in the `/backend` folder: `python -m pytest`

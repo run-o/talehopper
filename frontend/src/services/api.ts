@@ -2,7 +2,8 @@ import { StoryRequest, StoryResponse } from '../types/story';
 
 export const generateStory = async (request: StoryRequest): Promise<StoryResponse> => {
   try {
-    const response = await fetch('/story/generate', {
+    const apiUrl = process.env.REACT_APP_API_URL || '';
+    const response = await fetch(`${apiUrl}/story/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
