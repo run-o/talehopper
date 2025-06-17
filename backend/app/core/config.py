@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     LLM_OLLAMA_API_URL: str = "http://localhost:11434/api/generate"
     
     LLM_HUGGINGFACE_MODEL: str = "OpenLLM-France/Claire-Mistral-7B-0.1"
+    CORS_ORIGINS: str = "http://localhost:3000"
     
     model_config = ConfigDict(env_file=".env", env_file_encoding="utf-8")
     
