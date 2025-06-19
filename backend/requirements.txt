@@ -9,3 +9,4 @@ requests
 transformers
 torch
 happytransformer
+slowapi

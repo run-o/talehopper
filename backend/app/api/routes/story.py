@@ -1,15 +1,18 @@
 import logging
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Request
 from app import schemas
 from app.services.story_generator import llm_generate_story, StoryGeneratorException
+from app.core.rate_limiter import limiter
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/story", tags=["Story endpoints"])
 
+
 # we have one endpoint for both starting a new story and continuing an existing one:
 @router.post("/generate")
-async def generate_story(request: schemas.StoryRequest):
+@limiter.limit("10/minute")  # Limit to 10 requests per minute per IP
+async def generate_story(request: Request, story_request: schemas.StoryRequest):
     """ 
     This endpoint is used to start a new story or continue an existing one:
     - if StoryRequest only contains a seed prompt, it starts a new story
@@ -20,19 +23,19 @@ async def generate_story(request: schemas.StoryRequest):
     choices for the next step.
     """
     
-    if request.history and not request.choice:
+    if story_request.history and not story_request.choice:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Story choice missing."
         )    
-    if request.choice and not request.history:
+    if story_request.choice and not story_request.history:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Story history missing."
         )
 
     try:
-        paragraph, choices = await llm_generate_story(request)
+        paragraph, choices = await llm_generate_story(story_request)
     except StoryGeneratorException as exc:
         logger.error(f"Story generation failed: {exc}")
         raise HTTPException(
@@ -40,10 +43,7 @@ async def generate_story(request: schemas.StoryRequest):
             detail=str(exc)
         )
 
-    history = request.history
+    history = story_request.history
     history.append(paragraph)
     
-    return schemas.StoryResponse(history=history, choices=choices)    
-        
-    
-    
+    return schemas.StoryResponse(history=history, choices=choices)

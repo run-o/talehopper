@@ -2,11 +2,12 @@ import logging
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.main import api_router
 from app.services import story_generator
 from app.core.config import settings
+from app.core.rate_limiter import limiter, rate_limit_handler
 
 
 logging.basicConfig(level=logging.INFO)
@@ -25,7 +26,14 @@ async def lifespan(app: FastAPI):
     yield
     # do cleanup here if necessary
 
+
 app = FastAPI(lifespan=lifespan)
+
+# Set up a rate limiter:
+app.state.limiter = limiter
+app.add_exception_handler(429, rate_limit_handler)
+
+
 
 # Enable CORS
 app.add_middleware(
