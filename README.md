@@ -1,6 +1,6 @@
 # TaleHopper
 
-<img src="frontend/public/talehopper-logo.png" alt="TaleHopper logo" width="200" align="center"/>
+<img src="frontend/public/talehopper_logo.png" alt="TaleHopper logo" width="200" style="display:block; margin:auto;"/>
 
 TaleHopper is a Choose-Your-Own-Adventure story generator for kids, leveraging LLMs to generate fun, engaging and compelling stories that kids love to read.
 TaleHopper gives the reader control over the storyline, both on the initial setup and by letting them choose how the story progresses step-by-step.
