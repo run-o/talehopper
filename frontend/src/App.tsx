@@ -13,6 +13,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [isStoryStarted, setIsStoryStarted] = useState<boolean>(false);
   const [lastChoice, setLastChoice] = useState<string | undefined>(undefined);
+  const [lastUsedPrompt, setLastUsedPrompt] = useState<StoryPrompt | null>(null);
 
   const handleStartStory = async (prompt: StoryPrompt) => {
     setIsLoading(true);
@@ -26,6 +27,7 @@ function App() {
       });
       
       setStoryPrompt(prompt);
+      setLastUsedPrompt(prompt);
       setStoryHistory(response.history);
       setStoryChoices(response.choices);
       setIsStoryStarted(true);
@@ -110,6 +112,7 @@ function App() {
     setIsStoryStarted(false);
     setError(null);
     setLastChoice(undefined);
+    // We don't reset lastUsedPrompt here, so it can be used to prepopulate the form
   };
 
   return (
@@ -123,7 +126,7 @@ function App() {
       
       <main>
         {!isStoryStarted ? (
-          <StoryForm onSubmit={handleStartStory} isLoading={isLoading} />
+          <StoryForm onSubmit={handleStartStory} isLoading={isLoading} initialPrompt={lastUsedPrompt || undefined} />
         ) : (
           <StoryDisplay 
             history={storyHistory}

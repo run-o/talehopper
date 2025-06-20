@@ -4,21 +4,22 @@ import { StoryPrompt, Character } from '../types/story';
 interface StoryFormProps {
   onSubmit: (prompt: StoryPrompt) => void;
   isLoading: boolean;
+  initialPrompt?: StoryPrompt;
 }
 
-const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading }) => {
-  const [age, setAge] = useState<number>(8);
-  const [language, setLanguage] = useState<"english" | "french">("english");
-  const [length, setLength] = useState<number>(10);
-  const [prompt, setPrompt] = useState<string>("");
-  const [environment, setEnvironment] = useState<string>("");
-  const [theme, setTheme] = useState<string>("");
-  const [tone, setTone] = useState<StoryPrompt["tone"]>(undefined);
-  const [conflictType, setConflictType] = useState<StoryPrompt["conflict_type"]>(undefined);
-  const [endingStyle, setEndingStyle] = useState<StoryPrompt["ending_style"]>(undefined);
+const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPrompt }) => {
+  const [age, setAge] = useState<number>(initialPrompt?.age || 8);
+  const [language, setLanguage] = useState<"english" | "french">(initialPrompt?.language || "english");
+  const [length, setLength] = useState<number>(initialPrompt?.length || 10);
+  const [prompt, setPrompt] = useState<string>(initialPrompt?.prompt || "");
+  const [environment, setEnvironment] = useState<string>(initialPrompt?.environment || "");
+  const [theme, setTheme] = useState<string>(initialPrompt?.theme || "");
+  const [tone, setTone] = useState<StoryPrompt["tone"]>(initialPrompt?.tone || undefined);
+  const [conflictType, setConflictType] = useState<StoryPrompt["conflict_type"]>(initialPrompt?.conflict_type || undefined);
+  const [endingStyle, setEndingStyle] = useState<StoryPrompt["ending_style"]>(initialPrompt?.ending_style || undefined);
   
   // Character management
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const [characters, setCharacters] = useState<Character[]>(initialPrompt?.characters || []);
   const [characterName, setCharacterName] = useState<string>("");
   const [characterType, setCharacterType] = useState<string>("");
   const [characterGender, setCharacterGender] = useState<Character["gender"]>(undefined);
