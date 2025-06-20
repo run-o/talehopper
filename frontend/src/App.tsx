@@ -114,9 +114,11 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Tale Hopper</h1>
-        <p>Choose-Your-Own-Adventure Stories for Kids</p>
+      <header className="App-header" style={{ display: 'flex', alignItems: 'center' }}>
+        <img src="/talehopper_logo.png" alt="Tale Hopper Logo" className="App-logo" style={{ width: '200px', marginRight: '20px' }} />
+        <div style={{ textAlign: 'center' }}>
+          <h2>Choose-Your-Own-Adventure Stories for Kids</h2>
+        </div>
       </header>
       
       <main>
