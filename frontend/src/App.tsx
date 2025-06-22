@@ -3,9 +3,13 @@ import StoryForm from './components/StoryForm';
 import StoryDisplay from './components/StoryDisplay';
 import { StoryPrompt } from './types/story';
 import { generateStory } from './services/api';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './components/LanguageSwitcher';
 import './App.css';
 
+
 function App() {
+  const { t } = useTranslation();
   const [storyPrompt, setStoryPrompt] = useState<StoryPrompt | null>(null);
   const [storyHistory, setStoryHistory] = useState<string[]>([]);
   const [storyChoices, setStoryChoices] = useState<string[]>([]);
@@ -117,13 +121,16 @@ function App() {
 
   return (
     <div className="App">
+      <div style={{ position: 'absolute', top: 20, right: 20 }}>
+        <LanguageSwitcher />
+      </div>
       <header className="App-header" style={{ display: 'flex', alignItems: 'center' }}>
         <img src="/talehopper_logo.png" alt="Tale Hopper Logo" className="App-logo" style={{ width: '200px', marginRight: '20px' }} />
         <div style={{ textAlign: 'center' }}>
-          <h2>Choose-Your-Own-Adventure Stories for Kids</h2>
+          <h1>Tale Hopper</h1>
+          <h2>{t('app.header')}</h2>
         </div>
       </header>
-      
       <main>
         {!isStoryStarted ? (
           <StoryForm onSubmit={handleStartStory} isLoading={isLoading} initialPrompt={lastUsedPrompt || undefined} />

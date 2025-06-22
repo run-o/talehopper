@@ -1,0 +1,25 @@
+{
+  "app": {
+    "header": "Histoires Dont Vous Êtes Le Héros pour enfants"
+  },
+  "story_form": {
+    "title": "Créer une nouvelle histoire",
+    "age": "Âge de l'enfant (1-12) :",
+    "language": "Langue :",
+    "language_english": "Anglais",
+    "language_french": "Français",
+    "length": "Longueur de l'histoire (1 à 60 étapes) :",
+    "prompt": "Suggestion personnalisée (optionnelle) :",
+    "prompt_placeholder": "Ajoutez une suggestion pour l'histoire...",
+    "environment": "Environnement (optionnel) :",
+    "theme": "Thème (optionnel) :",
+    "tone": "Ton (optionnel) :",
+    "conflict": "Type de conflit (optionnel) :",
+    "ending": "Type de fin (optionnel) :",
+    "characters": "Personnages (optionnel)",
+    "add": "Ajouter",
+    "remove": "Supprimer",
+    "start": "Commencer une nouvelle histoire",
+    "starting": "Création de l'histoire..."
+  }
+}

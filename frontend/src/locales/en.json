@@ -1,0 +1,25 @@
+{
+  "app": {
+    "header": "Choose-Your-Own-Adventure Stories for Kids"
+  },
+  "story_form": {
+    "title": "Create a New Story",
+    "age": "Child's Age (1-12):",
+    "language": "Language:",
+    "language_english": "English",
+    "language_french": "French",
+    "length": "Story Length (1-60 steps):",
+    "prompt": "Custom Prompt (optional):",
+    "prompt_placeholder": "Add a custom prompt to guide the story...",
+    "environment": "Environment (optional):",
+    "theme": "Theme (optional):",
+    "tone": "Tone (optional):",
+    "conflict": "Conflict Type (optional):",
+    "ending": "Ending Style (optional):",
+    "characters": "Characters (optional)",
+    "add": "Add",
+    "remove": "Remove",
+    "start": "Start New Story",
+    "starting": "Starting Story..."
+  }
+}

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { StoryPrompt, Character } from '../types/story';
+import { useTranslation } from 'react-i18next';
+
 
 interface StoryFormProps {
   onSubmit: (prompt: StoryPrompt) => void;
@@ -8,6 +10,7 @@ interface StoryFormProps {
 }
 
 const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPrompt }) => {
+  const { t } = useTranslation();
   const [age, setAge] = useState<number>(initialPrompt?.age || 8);
   const [language, setLanguage] = useState<"english" | "french">(initialPrompt?.language || "english");
   const [length, setLength] = useState<number>(initialPrompt?.length || 10);
@@ -68,10 +71,10 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
 
   return (
     <div className="story-form-container">
-      <h2>Create a New Story</h2>
+      <h2>{t('story_form.title')}</h2>
       <form onSubmit={handleSubmit} className="story-form">
         <div className="form-group">
-            <label htmlFor="age">Child's Age (1-12):</label>
+            <label htmlFor="age">{t('story_form.age')}</label>
             <select
                 id="age"
                 value={age}
@@ -87,20 +90,20 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
         </div>
         
         <div className="form-group">
-          <label htmlFor="language">Language:</label>
+          <label htmlFor="language">{t('story_form.language')}</label>
           <select
             id="language"
             value={language}
             onChange={(e) => setLanguage(e.target.value as "english" | "french")}
             required
           >
-            <option value="english">English</option>
-            <option value="french">French</option>
+            <option value="english">{t('story_form.language_english')}</option>
+            <option value="french">{t('story_form.language_french')}</option>
           </select>
         </div>
         
         <div className="form-group">
-          <label htmlFor="length">Story Length (1-60 steps):</label>
+          <label htmlFor="length">{t('story_form.length')}</label>
           <input
             type="number"
             id="length"
@@ -113,17 +116,17 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
         </div>
         
         <div className="form-group">
-          <label htmlFor="prompt">Custom Prompt (optional):</label>
+          <label htmlFor="prompt">{t('story_form.prompt')}</label>
           <textarea
             id="prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Add a custom prompt to guide the story..."
+            placeholder={t('story_form.prompt_placeholder')}
           />
         </div>
         
         <div className="form-group">
-          <label htmlFor="environment">Environment (optional):</label>
+          <label htmlFor="environment">{t('story_form.environment')}</label>
           <input
             type="text"
             id="environment"
@@ -134,7 +137,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
         </div>
         
         <div className="form-group">
-          <label htmlFor="theme">Theme (optional):</label>
+          <label htmlFor="theme">{t('story_form.theme')}</label>
           <input
             type="text"
             id="theme"
@@ -145,7 +148,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
         </div>
         
         <div className="form-group">
-          <label htmlFor="tone">Tone (optional):</label>
+          <label htmlFor="tone">{t('story_form.tone')}</label>
           <input
             type="text"
             id="tone"
@@ -164,7 +167,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
         </div>
         
         <div className="form-group">
-          <label htmlFor="conflictType">Conflict Type (optional):</label>
+          <label htmlFor="conflictType">{t('story_form.conflict')}</label>
           <input
             type="text"
             id="conflictType"
@@ -182,7 +185,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
         </div>
         
         <div className="form-group">
-          <label htmlFor="endingStyle">Ending Style (optional):</label>
+          <label htmlFor="endingStyle">{t('story_form.ending')}</label>
           <input
             type="text"
             id="endingStyle"
@@ -200,7 +203,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
         </div>
         
         <div className="form-group characters-section">
-          <h3>Characters (optional)</h3>
+          <h3>{t('story_form.characters')}</h3>
 
           <div className="character-inputs">
             <input
@@ -260,7 +263,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
               onClick={addCharacter}
               disabled={!characterName || !characterType}
             >
-              Add
+              {t('story_form.add')}
             </button>
           </div>
 
@@ -271,7 +274,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
                 {character.name} ({character.type}
                 {character.gender ? `, ${character.gender}` : ""}
                 {character.personality ? `, ${character.personality}` : ""})
-                <button type="button" onClick={() => removeCharacter(index)}>Remove</button>
+                <button type="button" onClick={() => removeCharacter(index)}>{t('story_form.remove')}</button>
               </li>
               ))}
             </ul>
@@ -283,7 +286,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
           className="start-story-button" 
           disabled={isLoading}
         >
-          {isLoading ? 'Starting Story...' : 'Start New Story'}
+          {t(isLoading ? 'story_form.starting' : 'story_form.start')}
         </button>
       </form>
     </div>
