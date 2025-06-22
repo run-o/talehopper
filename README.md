@@ -54,7 +54,8 @@ To set up the frontend, ensure you have the correct Node.js and npm versions ins
 - `nvm install 24.1.0`
 - `nvm use 24.1.0`
 - upgrade npm if necessary: `npm install -g npm@11.4.1`
-- install dependencies: `npm install`
+- install yarn: `npm install -g yarn`
+- install dependencies: `yarn install`
 - run the frontend with: `npm start`
 
 - when deploying, set the REACT_APP_API_URL env variable to point to the backend service
