@@ -5,7 +5,7 @@
   "story_form": {
     "title": "Créer une nouvelle histoire",
     "age": "Âge de l'enfant (1-12) :",
-    "language": "Langue :",
+    "language": "Langue de l'histoire :",
     "language_english": "Anglais",
     "language_french": "Français",
     "length": "Longueur de l'histoire (1 à 60 étapes) :",
@@ -18,6 +18,9 @@
     "tone": "Ton (optionnel) :",
     "conflict": "Type de conflit (optionnel) :",
     "ending": "Type de fin (optionnel) :",
+    "advanced_options_show": "Afficher les options avancées",
+    "advanced_options_hide": "Masquer les options avancées",
+    "advanced_options_title": "Options avancées de l'histoire",
     "characters": "Personnages (optionnel)",
     "add": "Ajouter",
     "remove": "Supprimer",

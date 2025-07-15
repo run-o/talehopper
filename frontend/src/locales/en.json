@@ -5,7 +5,7 @@
   "story_form": {
     "title": "Create a New Story",
     "age": "Child's Age (1-12):",
-    "language": "Language:",
+    "language": "Language of the story:",
     "language_english": "English",
     "language_french": "French",
     "length": "Story Length (1-60 steps):",
@@ -18,6 +18,9 @@
     "tone": "Tone (optional):",
     "conflict": "Conflict Type (optional):",
     "ending": "Ending Style (optional):",
+    "advanced_options_show": "Show Advanced Options",
+    "advanced_options_hide": "Hide Advanced Options", 
+    "advanced_options_title": "Advanced Story Options",
     "characters": "Characters (optional)",
     "add": "Add",
     "remove": "Remove",

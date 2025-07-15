@@ -20,6 +20,9 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
   const [tone, setTone] = useState<StoryPrompt["tone"]>(initialPrompt?.tone || undefined);
   const [conflictType, setConflictType] = useState<StoryPrompt["conflict_type"]>(initialPrompt?.conflict_type || undefined);
   const [endingStyle, setEndingStyle] = useState<StoryPrompt["ending_style"]>(initialPrompt?.ending_style || undefined);
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState<boolean>(
+    !!(initialPrompt?.theme || initialPrompt?.tone || initialPrompt?.conflict_type || initialPrompt?.ending_style)
+  );
   
   // Character management
   const [characters, setCharacters] = useState<Character[]>(initialPrompt?.characters || []);
@@ -136,72 +139,6 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
           />
         </div>
         
-        <div className="form-group">
-          <label htmlFor="theme">{t('story_form.theme')}</label>
-          <input
-            type="text"
-            id="theme"
-            value={theme}
-            onChange={(e) => setTheme(e.target.value)}
-            placeholder={t('story_form.theme_placeholder')}
-          />
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="tone">{t('story_form.tone')}</label>
-          <input
-            type="text"
-            id="tone"
-            list="tone-options"
-            value={tone || ""}
-            onChange={(e) => setTone(e.target.value as StoryPrompt["tone"] || undefined)}
-            placeholder="Select or enter a tone..."
-          />
-          <datalist id="tone-options">
-            <option value="friendly" />
-            <option value="silly" />
-            <option value="adventurous" />
-            <option value="mysterious" />
-            <option value="wholesome" />
-          </datalist>
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="conflictType">{t('story_form.conflict')}</label>
-          <input
-            type="text"
-            id="conflictType"
-            list="conflict-options"
-            value={conflictType || ""}
-            onChange={(e) => setConflictType(e.target.value as StoryPrompt["conflict_type"] || undefined)}
-            placeholder="Select or enter a conflict type..."
-          />
-          <datalist id="conflict-options">
-            <option value="quest" />
-            <option value="problem" />
-            <option value="villain" />
-            <option value="lost item" />
-          </datalist>
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="endingStyle">{t('story_form.ending')}</label>
-          <input
-            type="text"
-            id="endingStyle"
-            list="ending-options"
-            value={endingStyle || ""}
-            onChange={(e) => setEndingStyle(e.target.value as StoryPrompt["ending_style"] || undefined)}
-            placeholder="Select or enter an ending style..."
-          />
-          <datalist id="ending-options">
-            <option value="happy" />
-            <option value="twist" />
-            <option value="moral" />
-            <option value="open" />
-          </datalist>
-        </div>
-        
         <div className="form-group characters-section">
           <h3>{t('story_form.characters')}</h3>
 
@@ -279,6 +216,100 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
               ))}
             </ul>
             )}
+        </div>
+        
+        {/* Advanced Options Accordion */}
+        <div className="accordion">
+          <div 
+            className={`accordion-header ${showAdvancedOptions ? 'expanded' : ''}`}
+            onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
+            role="button"
+            tabIndex={0}
+            aria-expanded={showAdvancedOptions}
+            aria-controls="advanced-options"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setShowAdvancedOptions(!showAdvancedOptions);
+              }
+            }}
+          >
+            <h4 className="accordion-title">{t('story_form.advanced_options_title')}</h4>
+            <span className={`accordion-icon ${showAdvancedOptions ? 'expanded' : ''}`}>
+              ▼
+            </span>
+          </div>
+          
+          {showAdvancedOptions && (
+            <div className="accordion-content" id="advanced-options">
+            
+            <div className="form-group">
+              <label htmlFor="theme">{t('story_form.theme')}</label>
+              <input
+                type="text"
+                id="theme"
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+                placeholder={t('story_form.theme_placeholder')}
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="tone">{t('story_form.tone')}</label>
+              <input
+                type="text"
+                id="tone"
+                list="tone-options"
+                value={tone || ""}
+                onChange={(e) => setTone(e.target.value as StoryPrompt["tone"] || undefined)}
+                placeholder="Select or enter a tone..."
+              />
+              <datalist id="tone-options">
+                <option value="friendly" />
+                <option value="silly" />
+                <option value="adventurous" />
+                <option value="mysterious" />
+                <option value="wholesome" />
+              </datalist>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="conflictType">{t('story_form.conflict')}</label>
+              <input
+                type="text"
+                id="conflictType"
+                list="conflict-options"
+                value={conflictType || ""}
+                onChange={(e) => setConflictType(e.target.value as StoryPrompt["conflict_type"] || undefined)}
+                placeholder="Select or enter a conflict type..."
+              />
+              <datalist id="conflict-options">
+                <option value="quest" />
+                <option value="problem" />
+                <option value="villain" />
+                <option value="lost item" />
+              </datalist>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="endingStyle">{t('story_form.ending')}</label>
+              <input
+                type="text"
+                id="endingStyle"
+                list="ending-options"
+                value={endingStyle || ""}
+                onChange={(e) => setEndingStyle(e.target.value as StoryPrompt["ending_style"] || undefined)}
+                placeholder="Select or enter an ending style..."
+              />
+              <datalist id="ending-options">
+                <option value="happy" />
+                <option value="twist" />
+                <option value="moral" />
+                <option value="open" />
+              </datalist>
+            </div>
+          </div>
+        )}
         </div>
         
         <button 
