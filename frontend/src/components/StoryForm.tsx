@@ -132,7 +132,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
             id="environment"
             value={environment}
             onChange={(e) => setEnvironment(e.target.value)}
-            placeholder="e.g., forest, castle, space"
+            placeholder={t('story_form.environment_placeholder')}
           />
         </div>
         
@@ -143,7 +143,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
             id="theme"
             value={theme}
             onChange={(e) => setTheme(e.target.value)}
-            placeholder="e.g., friendship, magic, adventure"
+            placeholder={t('story_form.theme_placeholder')}
           />
         </div>
         
