@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ParagraphListProps {
   paragraphs: string[];
@@ -11,6 +12,8 @@ const ParagraphList: React.FC<ParagraphListProps> = ({
   onRegenerateRequested,
   isLoading
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="paragraph-list">
       {paragraphs.map((paragraph, index) => (
@@ -22,7 +25,7 @@ const ParagraphList: React.FC<ParagraphListProps> = ({
               onClick={onRegenerateRequested}
               disabled={isLoading}
             >
-              Regenerate last paragraph
+              {t('story_display.regenerate')}
             </button>
           )}
           {index < paragraphs.length - 1 && <hr />}

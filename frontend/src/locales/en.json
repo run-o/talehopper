@@ -25,5 +25,12 @@
     "character_type": "Type (child, animal, etc.)",
     "character_gender": "Gender (optional)",
     "character_personality": "Personality (optional)"
+  },
+  "story_display": {
+    "start": "Start New Story",
+    "loading": "Loading next part of the story...",
+    "next": "What happens next?",
+    "end": "The End.",
+    "regenerate": "Regenerate last paragraph"
   }
 }

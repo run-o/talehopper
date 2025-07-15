@@ -1,6 +1,7 @@
 import React from 'react';
 import ParagraphList from './ParagraphList';
 import ChoiceButtons from './ChoiceButtons';
+import { useTranslation } from 'react-i18next';
 
 interface StoryDisplayProps {
   history: string[];
@@ -21,6 +22,8 @@ const StoryDisplay: React.FC<StoryDisplayProps> = ({
   isLoading,
   isStoryEnded = false,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="story-display">
       <ParagraphList 
@@ -42,11 +45,11 @@ const StoryDisplay: React.FC<StoryDisplayProps> = ({
           onClick={onRestart}
           disabled={isLoading}
         >
-          Start a New Story
+          {t('story_display.start')}
         </button>
       </div>
       
-      {isLoading && <div className="loading-indicator">Loading next part of the story...</div>}
+      {isLoading && <div className="loading-indicator">{t('story_display.loading')}</div>}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ChoiceButtonsProps {
   choices: string[];
@@ -13,9 +14,11 @@ const ChoiceButtons: React.FC<ChoiceButtonsProps> = ({
   disabled,
   isStoryEnded = false,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="choice-buttons">
-      <h3>{isStoryEnded ? "The End." : "What happens next?"}</h3>
+      <h3>{isStoryEnded ? t('story_display.end') : t('story_display.next')}</h3>
       <div className="buttons-container">
         {choices.map((choice, index) => (
           <button
