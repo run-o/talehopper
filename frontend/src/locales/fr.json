@@ -20,6 +20,10 @@
     "add": "Ajouter",
     "remove": "Supprimer",
     "start": "Commencer une nouvelle histoire",
-    "starting": "Création de l'histoire..."
+    "starting": "Création de l'histoire...",
+    "character_name": "Nom",
+    "character_type": "Type (enfant, animal, etc.)",
+    "character_gender": "Genre (optionnel)",
+    "character_personality": "Personnalité (optionnel)"
   }
 }

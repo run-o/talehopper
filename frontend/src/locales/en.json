@@ -20,6 +20,10 @@
     "add": "Add",
     "remove": "Remove",
     "start": "Start New Story",
-    "starting": "Starting Story..."
+    "starting": "Starting Story...",
+    "character_name": "Name",
+    "character_type": "Type (child, animal, etc.)",
+    "character_gender": "Gender (optional)",
+    "character_personality": "Personality (optional)"
   }
 }

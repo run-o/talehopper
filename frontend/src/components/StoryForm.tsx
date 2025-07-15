@@ -174,7 +174,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
             list="conflict-options"
             value={conflictType || ""}
             onChange={(e) => setConflictType(e.target.value as StoryPrompt["conflict_type"] || undefined)}
-            placeholder="Select a conflict type..."
+            placeholder="Select or enter a conflict type..."
           />
           <datalist id="conflict-options">
             <option value="quest" />
@@ -192,7 +192,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
             list="ending-options"
             value={endingStyle || ""}
             onChange={(e) => setEndingStyle(e.target.value as StoryPrompt["ending_style"] || undefined)}
-            placeholder="Select an ending style (happy, moral, etc)"
+            placeholder="Select or enter an ending style..."
           />
           <datalist id="ending-options">
             <option value="happy" />
@@ -210,13 +210,13 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
               type="text"
               value={characterName}
               onChange={(e) => setCharacterName(e.target.value)}
-              placeholder="Name"
+              placeholder={t('story_form.character_name')}
             />
             <input
               type="text"
               value={characterType}
               onChange={(e) => setCharacterType(e.target.value)}
-              placeholder="Type (child, animal, etc.)"
+              placeholder={t('story_form.character_type')}
             />
             
             {/* Gender with Datalist */}
@@ -226,7 +226,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
               list="gender-options"
               value={characterGender || ""}
               onChange={(e) => setCharacterGender(e.target.value || undefined)}
-              placeholder="Gender (optional)"
+              placeholder={t('story_form.character_gender')}
             />
             <datalist id="gender-options">
               <option value="Boy" />
@@ -241,7 +241,7 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
               list="personality-options"
               value={characterPersonality || ""}
               onChange={(e) => setCharacterPersonality(e.target.value || undefined)}
-              placeholder="Personality (optional)"
+              placeholder={t('story_form.character_personality')}
             />
             <datalist id="personality-options">
               <option value="Good" />
