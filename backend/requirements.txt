@@ -10,3 +10,4 @@ transformers
 torch
 happytransformer
 slowapi
+sendgrid

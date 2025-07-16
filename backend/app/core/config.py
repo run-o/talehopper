@@ -15,7 +15,11 @@ class Settings(BaseSettings):
     LLM_HUGGINGFACE_MODEL: str = "OpenLLM-France/Claire-Mistral-7B-0.1"
     CORS_ORIGINS: str = "http://localhost:3000"
     
+    # Feedback settings
+    SENDGRID_API_KEY: str
+    FEEDBACK_EMAIL_TO: str      # email where feedback will be sent
+    FEEDBACK_EMAIL_FROM: str    # Verified sender email for SendGrid
+
     model_config = ConfigDict(env_file=".env", env_file_encoding="utf-8")
     
 settings = Settings()
-
