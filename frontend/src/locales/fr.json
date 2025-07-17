@@ -12,13 +12,15 @@
     "prompt": "Suggestion personnalisée (optionnelle) :",
     "prompt_placeholder": "Ajoutez une suggestion pour l'histoire...",
     "environment": "Environnement (optionnel) :",
-    "environment_placeholder": "e.g., forêt, château, espace",
+    "environment_placeholder": "par ex: maison, forêt, château, espace, océan",
     "theme": "Thème (optionnel) :",
-    "theme_placeholder": "e.g., amitié, magie, aventure",
+    "theme_placeholder": "par ex: amitié, magie, aventure",
     "tone": "Ton (optionnel) :",
-    "tone_placeholder": "e.g., joyeux, sérieux, mystérieux",
+    "tone_placeholder": "Sélectionnez ou entrez un ton...",
     "conflict": "Type de conflit (optionnel) :",
+    "conflict_placeholder": "Sélectionnez ou entrez un type de conflit...",
     "ending": "Type de fin (optionnel) :",
+    "ending_placeholder": "Sélectionnez ou entrez un type de fin...",
     "advanced_options_show": "Afficher les options avancées",
     "advanced_options_hide": "Masquer les options avancées",
     "advanced_options_title": "Options avancées de l'histoire",
@@ -51,5 +53,45 @@
     "success": "Merci pour vos commentaires ! Nous les examinerons bientôt.",
     "error": "Échec de l'envoi des commentaires. Veuillez réessayer.",
     "button": "Commentaires"
+  },
+  "options": {
+    "gender": {
+      "boy": "Garçon",
+      "girl": "Fille",
+      "neutral": "Neutre"
+    },
+    "personality": {
+      "good": "Bon",
+      "bad": "Mauvais",
+      "neutral": "Neutre",
+      "kind": "Gentil",
+      "brave": "Courageux",
+      "helpful": "Serviable",
+      "mean": "Méchant",
+      "selfish": "Égoïste",
+      "mischievous": "Espiègle",
+      "cruel": "Cruel",
+      "evil": "Maléfique",
+      "heroic": "Héroïque"
+    },
+    "tone": {
+      "friendly": "Amical",
+      "silly": "Amusant",
+      "adventurous": "Aventureux",
+      "mysterious": "Mystérieux",
+      "wholesome": "Sain"
+    },
+    "conflict": {
+      "quest": "Quête",
+      "problem": "Problème",
+      "villain": "Méchant",
+      "lost_item": "Objet Perdu"
+    },
+    "ending": {
+      "happy": "Heureux",
+      "twist": "Rebondissement",
+      "moral": "Morale",
+      "open": "Ouvert"
+    }
   }
 }

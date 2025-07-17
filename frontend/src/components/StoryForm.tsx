@@ -1,6 +1,20 @@
 import React, { useState } from 'react';
-import { StoryPrompt, Character } from '../types/story';
+import { 
+  StoryPrompt, 
+  Character, 
+  Gender, 
+  Personality, 
+  Tone, 
+  ConflictType, 
+  EndingStyle,
+  GENDER_OPTIONS,
+  PERSONALITY_OPTIONS,
+  TONE_OPTIONS,
+  CONFLICT_OPTIONS,
+  ENDING_OPTIONS
+} from '../types/story';
 import { useTranslation } from 'react-i18next';
+import DatalistInput from './DatalistInput';
 
 
 interface StoryFormProps {
@@ -157,43 +171,24 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
             />
             
             {/* Gender with Datalist */}
-            <input
-              type="text"
+            <DatalistInput<Gender>
               id="characterGender"
-              list="gender-options"
-              value={characterGender || ""}
-              onChange={(e) => setCharacterGender(e.target.value || undefined)}
+              value={characterGender}
+              onChange={setCharacterGender}
               placeholder={t('story_form.character_gender')}
+              options={GENDER_OPTIONS}
+              optionTranslationKey="options.gender"
             />
-            <datalist id="gender-options">
-              <option value="Boy" />
-              <option value="Girl" />
-              <option value="Neutral" />
-            </datalist>
 
             {/* Personality with Datalist */}
-            <input
-              type="text"
+            <DatalistInput<Personality>
               id="characterPersonality"
-              list="personality-options"
-              value={characterPersonality || ""}
-              onChange={(e) => setCharacterPersonality(e.target.value || undefined)}
+              value={characterPersonality}
+              onChange={setCharacterPersonality}
               placeholder={t('story_form.character_personality')}
+              options={PERSONALITY_OPTIONS}
+              optionTranslationKey="options.personality"
             />
-            <datalist id="personality-options">
-              <option value="Good" />
-              <option value="Bad" />
-              <option value="Neutral" />
-              <option value="Kind" />
-              <option value="Brave" />
-              <option value="Helpful" />
-              <option value="Mean" />
-              <option value="Selfish" />
-              <option value="Mischievous" />
-              <option value="Cruel" />
-              <option value="Evil" />
-              <option value="Heroic" />
-            </datalist>
 
             <button
               type="button"
@@ -256,57 +251,38 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
             
             <div className="form-group">
               <label htmlFor="tone">{t('story_form.tone')}</label>
-              <input
-                type="text"
+              <DatalistInput<Tone>
                 id="tone"
-                list="tone-options"
-                value={tone || ""}
-                onChange={(e) => setTone(e.target.value as StoryPrompt["tone"] || undefined)}
-                placeholder="Select or enter a tone..."
+                value={tone}
+                onChange={setTone}
+                placeholder={t('story_form.tone_placeholder')}
+                options={TONE_OPTIONS}
+                optionTranslationKey="options.tone"
               />
-              <datalist id="tone-options">
-                <option value="friendly" />
-                <option value="silly" />
-                <option value="adventurous" />
-                <option value="mysterious" />
-                <option value="wholesome" />
-              </datalist>
             </div>
             
             <div className="form-group">
               <label htmlFor="conflictType">{t('story_form.conflict')}</label>
-              <input
-                type="text"
+              <DatalistInput<ConflictType>
                 id="conflictType"
-                list="conflict-options"
-                value={conflictType || ""}
-                onChange={(e) => setConflictType(e.target.value as StoryPrompt["conflict_type"] || undefined)}
-                placeholder="Select or enter a conflict type..."
+                value={conflictType}
+                onChange={setConflictType}
+                placeholder={t('story_form.conflict_placeholder')}
+                options={CONFLICT_OPTIONS}
+                optionTranslationKey="options.conflict"
               />
-              <datalist id="conflict-options">
-                <option value="quest" />
-                <option value="problem" />
-                <option value="villain" />
-                <option value="lost item" />
-              </datalist>
             </div>
             
             <div className="form-group">
               <label htmlFor="endingStyle">{t('story_form.ending')}</label>
-              <input
-                type="text"
+              <DatalistInput<EndingStyle>
                 id="endingStyle"
-                list="ending-options"
-                value={endingStyle || ""}
-                onChange={(e) => setEndingStyle(e.target.value as StoryPrompt["ending_style"] || undefined)}
-                placeholder="Select or enter an ending style..."
+                value={endingStyle}
+                onChange={setEndingStyle}
+                placeholder={t('story_form.ending_placeholder')}
+                options={ENDING_OPTIONS}
+                optionTranslationKey="options.ending"
               />
-              <datalist id="ending-options">
-                <option value="happy" />
-                <option value="twist" />
-                <option value="moral" />
-                <option value="open" />
-              </datalist>
             </div>
           </div>
         )}

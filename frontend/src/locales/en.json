@@ -12,12 +12,15 @@
     "prompt": "Custom Prompt (optional):",
     "prompt_placeholder": "Add a custom prompt to guide the story...",
     "environment": "Environment (optional):",
-    "environment_placeholder": "e.g., forest, castle, space",
+    "environment_placeholder": "e.g., house, forest, castle, space, ocean",
     "theme": "Theme (optional):",
     "theme_placeholder": "e.g., friendship, magic, adventure",
     "tone": "Tone (optional):",
+    "tone_placeholder": "Select or enter a tone...",
     "conflict": "Conflict Type (optional):",
+    "conflict_placeholder": "Select or enter a conflict type...",
     "ending": "Ending Style (optional):",
+    "ending_placeholder": "Select or enter an ending style...",
     "advanced_options_show": "Show Advanced Options",
     "advanced_options_hide": "Hide Advanced Options", 
     "advanced_options_title": "Advanced Story Options",
@@ -50,5 +53,45 @@
     "success": "Thank you for your feedback! We'll review it soon.",
     "error": "Failed to send feedback. Please try again.",
     "button": "Feedback"
+  },
+  "options": {
+    "gender": {
+      "boy": "Boy",
+      "girl": "Girl",
+      "neutral": "Neutral"
+    },
+    "personality": {
+      "good": "Good",
+      "bad": "Bad",
+      "neutral": "Neutral",
+      "kind": "Kind",
+      "brave": "Brave",
+      "helpful": "Helpful",
+      "mean": "Mean",
+      "selfish": "Selfish",
+      "mischievous": "Mischievous",
+      "cruel": "Cruel",
+      "evil": "Evil",
+      "heroic": "Heroic"
+    },
+    "tone": {
+      "friendly": "Friendly",
+      "silly": "Silly",
+      "adventurous": "Adventurous",
+      "mysterious": "Mysterious",
+      "wholesome": "Wholesome"
+    },
+    "conflict": {
+      "quest": "Quest",
+      "problem": "Problem",
+      "villain": "Villain",
+      "lost_item": "Lost Item"
+    },
+    "ending": {
+      "happy": "Happy",
+      "twist": "Twist",
+      "moral": "Moral",
+      "open": "Open"
+    }
   }
 }
