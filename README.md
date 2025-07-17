@@ -10,6 +10,8 @@ TaleHopper gives the reader control over the storyline, both on the initial setu
 
 The backend is using FastAPI with Python and the frontend is using React with Typescript.
 
+You can try the app here: https://talehopper.onrender.com/
+
 
 ## Docker Setup (Recommended)
 
