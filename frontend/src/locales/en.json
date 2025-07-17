@@ -37,5 +37,18 @@
     "next": "What happens next?",
     "end": "The End.",
     "regenerate": "Regenerate last paragraph"
+  },
+  "feedback": {
+    "title": "Send Feedback",
+    "messageLabel": "Your feedback",
+    "messagePlaceholder": "Tell us what you think about TaleHopper! Bug reports, feature requests, or general comments are all welcome.",
+    "emailLabel": "Your email (optional)",
+    "emailPlaceholder": "your.email@example.com",
+    "send": "Send Feedback",
+    "sending": "Sending...",
+    "cancel": "Cancel",
+    "success": "Thank you for your feedback! We'll review it soon.",
+    "error": "Failed to send feedback. Please try again.",
+    "button": "Feedback"
   }
 }

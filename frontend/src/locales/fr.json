@@ -16,6 +16,7 @@
     "theme": "Thème (optionnel) :",
     "theme_placeholder": "e.g., amitié, magie, aventure",
     "tone": "Ton (optionnel) :",
+    "tone_placeholder": "e.g., joyeux, sérieux, mystérieux",
     "conflict": "Type de conflit (optionnel) :",
     "ending": "Type de fin (optionnel) :",
     "advanced_options_show": "Afficher les options avancées",
@@ -37,5 +38,18 @@
     "next": "Que ce passe-t-il ensuite ?",
     "end": "Fin.",
     "regenerate": "Régénérer le dernier paragraphe"
+  },
+  "feedback": {
+    "title": "Envoyer des commentaires",
+    "messageLabel": "Vos commentaires",
+    "messagePlaceholder": "Dites-nous ce que vous pensez de TaleHopper ! Rapports de bugs, demandes de fonctionnalités ou commentaires généraux sont tous les bienvenus.",
+    "emailLabel": "Votre email (optionnel)",
+    "emailPlaceholder": "votre.email@exemple.com",
+    "send": "Envoyer",
+    "sending": "Envoi en cours...",
+    "cancel": "Annuler",
+    "success": "Merci pour vos commentaires ! Nous les examinerons bientôt.",
+    "error": "Échec de l'envoi des commentaires. Veuillez réessayer.",
+    "button": "Commentaires"
   }
 }

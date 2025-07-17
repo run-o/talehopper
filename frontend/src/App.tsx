@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import StoryForm from './components/StoryForm';
 import StoryDisplay from './components/StoryDisplay';
+import FeedbackModal from './components/FeedbackModal';
 import { StoryPrompt } from './types/story';
-import { generateStory } from './services/api';
+import { generateStory, sendFeedback, FeedbackRequest } from './services/api';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import './App.css';
@@ -18,6 +19,7 @@ function App() {
   const [isStoryStarted, setIsStoryStarted] = useState<boolean>(false);
   const [lastChoice, setLastChoice] = useState<string | undefined>(undefined);
   const [lastUsedPrompt, setLastUsedPrompt] = useState<StoryPrompt | null>(null);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState<boolean>(false);
 
   const handleStartStory = async (prompt: StoryPrompt) => {
     setIsLoading(true);
@@ -119,6 +121,10 @@ function App() {
     // We don't reset lastUsedPrompt here, so it can be used to prepopulate the form
   };
 
+  const handleFeedbackSubmit = async (feedback: FeedbackRequest) => {
+    await sendFeedback(feedback);
+  };
+
   return (
     <div className="App">
       <div style={{ position: 'absolute', top: 20, right: 20 }}>
@@ -148,6 +154,39 @@ function App() {
         
         {error && <div className="error-message">{error}</div>}
       </main>
+      
+      <footer style={{ 
+        position: 'fixed', 
+        bottom: 20, 
+        right: 20, 
+        zIndex: 100 
+      }}>
+        <button
+          onClick={() => setIsFeedbackModalOpen(true)}
+          style={{
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '20px',
+            padding: '10px 16px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+            transition: 'background-color 0.2s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0056b3'}
+          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#007bff'}
+        >
+          {t('feedback.button')}
+        </button>
+      </footer>
+
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        onSubmit={handleFeedbackSubmit}
+      />
     </div>
   );
 }

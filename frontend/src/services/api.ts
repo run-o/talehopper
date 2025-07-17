@@ -21,3 +21,28 @@ export const generateStory = async (request: StoryRequest): Promise<StoryRespons
     throw error;
   }
 };
+
+export interface FeedbackRequest {
+  message: string;
+  email?: string;
+}
+
+export const sendFeedback = async (feedback: FeedbackRequest): Promise<void> => {
+  try {
+    const apiUrl = process.env.REACT_APP_API_URL || '';
+    const response = await fetch(`${apiUrl}/feedback`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(feedback),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error sending feedback:', error);
+    throw error;
+  }
+};
