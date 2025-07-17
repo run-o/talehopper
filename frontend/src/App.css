@@ -359,6 +359,32 @@
   color: #757575;
 }
 
+.app-footer {
+  width: 100%;
+  background: #fff;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 24px 24px 24px; /* right and bottom padding for spacing */
+  border-top: 1px solid #eee;
+  box-sizing: border-box;
+  margin-top: 32px;
+}
+
+.feedback-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .App {
@@ -377,5 +403,12 @@
     flex: none;
     width: 100%;
     margin-bottom: 10px;
+  }
+  .app-footer {
+    padding: 0 8px 16px 8px;
+  }
+  .feedback-btn {
+    font-size: 13px;
+    padding: 8px 12px;
   }
 }

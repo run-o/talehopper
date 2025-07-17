@@ -155,12 +155,7 @@ function App() {
         {error && <div className="error-message">{error}</div>}
       </main>
       
-      <footer style={{ 
-        position: 'fixed', 
-        bottom: 20, 
-        right: 20, 
-        zIndex: 100 
-      }}>
+      <footer className="app-footer">
         <button
           onClick={() => setIsFeedbackModalOpen(true)}
           style={{
