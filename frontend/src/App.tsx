@@ -127,7 +127,7 @@ function App() {
 
   return (
     <div className="App">
-      <div style={{ position: 'absolute', top: 20, right: 20 }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '20px 20px 0 20px' }}>
         <LanguageSwitcher />
       </div>
       <header className="App-header" style={{ display: 'flex', alignItems: 'center' }}>
