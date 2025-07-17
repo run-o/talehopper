@@ -159,39 +159,46 @@ const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, isLoading, initialPromp
           <div className="character-inputs">
             <input
               type="text"
+              className="character-name-input"
               value={characterName}
               onChange={(e) => setCharacterName(e.target.value)}
               placeholder={t('story_form.character_name')}
             />
             <input
               type="text"
+              className="character-type-input"
               value={characterType}
               onChange={(e) => setCharacterType(e.target.value)}
               placeholder={t('story_form.character_type')}
             />
             
             {/* Gender with Datalist */}
-            <DatalistInput<Gender>
-              id="characterGender"
-              value={characterGender}
-              onChange={setCharacterGender}
-              placeholder={t('story_form.character_gender')}
-              options={GENDER_OPTIONS}
-              optionTranslationKey="options.gender"
-            />
+            <div className="character-gender-input">
+              <DatalistInput<Gender>
+                id="characterGender"
+                value={characterGender}
+                onChange={setCharacterGender}
+                placeholder={t('story_form.character_gender')}
+                options={GENDER_OPTIONS}
+                optionTranslationKey="options.gender"
+              />
+            </div>
 
             {/* Personality with Datalist */}
-            <DatalistInput<Personality>
-              id="characterPersonality"
-              value={characterPersonality}
-              onChange={setCharacterPersonality}
-              placeholder={t('story_form.character_personality')}
-              options={PERSONALITY_OPTIONS}
-              optionTranslationKey="options.personality"
-            />
+            <div className="character-personality-input">
+              <DatalistInput<Personality>
+                id="characterPersonality"
+                value={characterPersonality}
+                onChange={setCharacterPersonality}
+                placeholder={t('story_form.character_personality')}
+                options={PERSONALITY_OPTIONS}
+                optionTranslationKey="options.personality"
+              />
+            </div>
 
             <button
               type="button"
+              className="character-add-button"
               onClick={addCharacter}
               disabled={!characterName || !characterType}
             >
