@@ -148,7 +148,7 @@
 
 /* Individual character input widths */
 .character-name-input {
-  flex: 3;
+  flex: 2;
   min-width: 80px;
   padding: 8px;
   border: 1px solid #ddd;
@@ -158,7 +158,7 @@
 }
 
 .character-type-input {
-  flex: 4;
+  flex: 3;
   min-width: 90px;
   padding: 8px;
   border: 1px solid #ddd;
@@ -168,7 +168,7 @@
 }
 
 .character-gender-input {
-  flex: 2;
+  flex: 2.6;
   min-width: 60px;
 }
 
@@ -182,7 +182,7 @@
 }
 
 .character-personality-input {
-  flex: 3;
+  flex: 3.5;
   min-width: 90px;
 }
 
