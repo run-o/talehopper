@@ -187,10 +187,9 @@ async def llm_generate_story(request: StoryRequest):
     try:
         # strip whitespace, backticks and quotes:
         json_content = json_content.strip().strip("`'\"")
-        print(f"LLM response content: {json_content}")
+        logger.info(f"LLM response content: {json_content}")
         story = json.loads(json_content)
     except json.JSONDecodeError as exc:
-        logger.error(f"LLM response content: {json_content}")
         raise StoryGeneratorException(f"Invalid JSON from LLM: {str(exc)}")
     
     return story["paragraph"], story["choices"]
