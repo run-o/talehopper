@@ -61,6 +61,13 @@ function DatalistInput<T extends string>({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      // Prevent form submission when Enter is pressed in datalist input
+      e.preventDefault();
+    }
+  };
+
   // Display the translated value in the input
   const displayValue = value ? (keyToTranslation.get(value) || value) : "";
 
@@ -72,6 +79,7 @@ function DatalistInput<T extends string>({
         list={`${id}-options`}
         value={displayValue}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
         required={required}
       />
