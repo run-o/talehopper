@@ -13,7 +13,13 @@ from app.core.rate_limiter import limiter, rate_limit_handler
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-cors_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else ["*"]
+class HealthCheckLogFilter(logging.Filter):
+    """ Custom log filter to exclude health check logs """
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "/health" not in record.getMessage()
+
+# Filter out /health check logs from the access log:
+logging.getLogger("uvicorn.access").addFilter(HealthCheckLogFilter())
 
 
 @asynccontextmanager
@@ -34,8 +40,8 @@ app.state.limiter = limiter
 app.add_exception_handler(429, rate_limit_handler)
 
 
-
 # Enable CORS
+cors_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
@@ -49,3 +55,7 @@ app.include_router(api_router)
 @app.get('/')
 async def root():
     return {"message": "Welcome to Tale Hopper!"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
