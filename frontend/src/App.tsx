@@ -14,6 +14,7 @@ function App() {
   const [storyPrompt, setStoryPrompt] = useState<StoryPrompt | null>(null);
   const [storyHistory, setStoryHistory] = useState<string[]>([]);
   const [storyChoices, setStoryChoices] = useState<string[]>([]);
+  const [stagePlan, setStagePlan] = useState<{ [key: string]: number } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isStoryStarted, setIsStoryStarted] = useState<boolean>(false);
@@ -30,12 +31,14 @@ function App() {
         prompt,
         history: [],
         choice: undefined,
+        stage_plan: undefined, // Start with no stage plan for new stories
       });
       
       setStoryPrompt(prompt);
       setLastUsedPrompt(prompt);
       setStoryHistory(response.history);
       setStoryChoices(response.choices);
+      setStagePlan(response.stage_plan); // Save the stage plan from the response
       setIsStoryStarted(true);
       setLastChoice(undefined);
     } catch (err) {
@@ -58,10 +61,13 @@ function App() {
         prompt: storyPrompt,
         history: storyHistory,
         choice,
+        stage_plan: stagePlan || undefined, // Pass the saved stage plan
       });
       
       setStoryHistory(response.history);
       setStoryChoices(response.choices);
+      // Update stage plan in case it changed (though it shouldn't for existing stories)
+      setStagePlan(response.stage_plan);
     } catch (err) {
       setError('Failed to continue story. Please try again.');
       console.error(err);
@@ -88,20 +94,24 @@ function App() {
           prompt: storyPrompt,
           history: [],
           choice: undefined,
+          stage_plan: stagePlan || undefined, // Pass the saved stage plan
         });
         
         setStoryHistory(response.history);
         setStoryChoices(response.choices);
+        setStagePlan(response.stage_plan);
       } else {
         // Otherwise regenerate with the previous history and last choice
         const response = await generateStory({
           prompt: storyPrompt,
           history: previousHistory,
           choice: lastChoice,
+          stage_plan: stagePlan || undefined, // Pass the saved stage plan
         });
         
         setStoryHistory(response.history);
         setStoryChoices(response.choices);
+        setStagePlan(response.stage_plan);
       }
     } catch (err) {
       setError('Failed to regenerate story. Please try again.');
@@ -115,6 +125,7 @@ function App() {
     setStoryPrompt(null);
     setStoryHistory([]);
     setStoryChoices([]);
+    setStagePlan(null); // Reset the stage plan when restarting
     setIsStoryStarted(false);
     setError(null);
     setLastChoice(undefined);

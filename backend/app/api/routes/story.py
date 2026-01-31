@@ -35,7 +35,7 @@ async def generate_story(request: Request, story_request: schemas.StoryRequest):
         )
 
     try:
-        paragraph, choices = await llm_generate_story(story_request)
+        paragraph, choices, stage_plan = await llm_generate_story(story_request)
     except StoryGeneratorException as exc:
         logger.error(f"Story generation failed: {exc}")
         raise HTTPException(
@@ -46,4 +46,4 @@ async def generate_story(request: Request, story_request: schemas.StoryRequest):
     history = story_request.history
     history.append(paragraph)
     
-    return schemas.StoryResponse(history=history, choices=choices)
+    return schemas.StoryResponse(history=history, choices=choices, stage_plan=stage_plan)

@@ -1,4 +1,4 @@
-from typing import List, Optional, Literal
+from typing import Dict, List, Optional, Literal
 from pydantic import BaseModel, Field
 
 # TODO: replace some of the Literal types with enums for better validation and readability
@@ -28,8 +28,10 @@ class StoryRequest(BaseModel):
     prompt: StoryPrompt
     history: List[str] = Field(default_factory=list, description="All previously generated story paragraphs")
     choice: Optional[str] = Field(None, description="Reader's choice for the next step in the story")
+    stage_plan: Optional[Dict[str, int]] = Field(None, description="Number of steps for each stage in the story")
 
     
 class StoryResponse(BaseModel):
     choices: List[str] = Field(..., description="List of options for the next step of the story")
     history: List[str] = Field(..., description="Ordered list of all story steps up to this point")
+    stage_plan: Dict[str, int] = Field(..., description="Number of steps for each stage in the story")

@@ -36,9 +36,11 @@ export interface StoryRequest {
   prompt: StoryPrompt;
   history: string[];
   choice?: string;
+  stage_plan?: { [key: string]: number };
 }
 
 export interface StoryResponse {
   choices: string[];
   history: string[];
+  stage_plan: { [key: string]: number };
 }

@@ -1,11 +1,13 @@
 import logging
 import json
 import httpx
+import random
+from enum import StrEnum
 from fastapi.concurrency import run_in_threadpool
 from openai import AsyncOpenAI, OpenAIError
 from app.schemas import StoryRequest, StoryPrompt
 from app.core.config import settings
-from typing import List, Optional
+from typing import Dict, List, Optional, Tuple
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
 logger = logging.getLogger(__name__)
@@ -38,7 +40,95 @@ def initialize():
         hf_pipeline = pipeline("text-generation", model=hf_model, tokenizer=hf_tokenizer)
 
 
-def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional[str]) -> str:
+class Stage(StrEnum):
+    INTRO = "Introduction"
+    RISING = "Rising Action"
+    CLIMAX = "Climax"
+    RESOLUTION = "Resolution"
+    
+class StageManager:
+    
+    STAGE_HINTS = {
+        Stage.INTRO: "This is the introduction. Focus on setting the scene, introducing characters, and hinting at the quest or conflict.",
+        Stage.RISING: "This is the rising action. Add challenges, discoveries, or surprises that keep the story moving toward the climax.",
+        Stage.CLIMAX: "This is the climax. Make this the most exciting and important challenge of the quest. Set up the resolution.",
+        Stage.RESOLUTION: "This is the resolution. Wrap up the story with a satisfying, happy conclusion that ties back to the quest."
+    }
+
+    def __init__(self, total_steps: int, stage_plan: Optional[Dict[str, int]] = None):
+        self.total_steps = total_steps
+        self.stage_order = [Stage.INTRO, Stage.RISING, Stage.CLIMAX, Stage.RESOLUTION]
+        # generate a plan if not provided:
+        if stage_plan is None:
+            self.plan = self.generate_plan(total_steps)
+        else:
+            # Convert string keys to Stage enum keys
+            self.plan = self._convert_string_plan_to_enum(stage_plan)
+
+    def generate_plan(self, total_steps: int) -> Dict[Stage, int]:
+        proportions = {
+            Stage.INTRO: (0.1, 0.2),        # 10-20% of steps
+            Stage.RISING: (0.4, 0.6),       # 40-60% of steps
+            Stage.CLIMAX: (0.15, 0.25),     # 15-25% of steps
+            Stage.RESOLUTION: (0.1, 0.2)    # 10-20% of steps
+        }
+        # Randomly allocate a fraction for each stage:
+        raw_alloc = {
+            s: random.uniform(lo, hi)
+            for s, (lo, hi) in proportions.items()
+        }
+        # Normalize so total fraction = 1:
+        total_frac = sum(raw_alloc.values())
+        norm_alloc = {
+            stage: frac / total_frac
+            for stage, frac in raw_alloc.items()
+        }
+        # convert to step counts:
+        stage_steps = {
+            stage: int(round(norm_alloc[stage] * total_steps))
+            for stage in norm_alloc
+        }
+        # Adjust step count for rounding errors:
+        diff = total_steps - sum(stage_steps.values())
+        while diff != 0:
+            stage = random.choice(self.stage_order)
+            if diff > 0:
+                stage_steps[stage] += 1
+                diff -= 1
+            elif diff < 0 and stage_steps[stage] > 1:
+                stage_steps[stage] -= 1
+                diff += 1
+
+        return stage_steps
+
+    def _convert_string_plan_to_enum(self, stage_plan: Dict[str, int]) -> Dict[Stage, int]:
+        """ Convert string keys to Stage enum keys. """
+        enum_plan = {}
+        for stage_name, count in stage_plan.items():
+            # Find the matching Stage enum by value
+            for stage_enum in Stage:
+                if stage_enum.value == stage_name:
+                    enum_plan[stage_enum] = count
+                    break
+        return enum_plan
+    
+    def get_plan_as_strings(self) -> Dict[str, int]:
+        """ Convert the internal enum-based plan to string keys for API response. """
+        return {stage.value: count for stage, count in self.plan.items()}
+
+    def get_stage_guidance(self, step: int) -> str:
+        """ Return the stage for the given step (1-indexed). """
+        cumulative = 0
+        for stage in self.stage_order:
+            cumulative += self.plan[stage]
+            if step <= cumulative:
+                return self.STAGE_HINTS[stage]
+        # fallback
+        stage = self.stage_order[-1]
+        return self.STAGE_HINTS[stage]
+
+
+def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional[str], stage_guidance: str) -> str:
     instructions = []
     # Base instruction
     instructions.append(
@@ -88,6 +178,7 @@ def build_story_prompt(prompt: StoryPrompt, history: List[str], choice: Optional
 
     # Instruction to generate next part
     instructions.append("Now write the next paragraph of the story, only write one paragraph at a time.")
+    instructions.append(f"Current story stage: {stage_guidance}")
     instructions.append(f"The story should have a total of {prompt.length} paragraphs, so make sure to adjust the storyline and progression accordingly.")
     if len(history) < prompt.length - 1:
         instructions.append("Then offer 2 or 3 engaging choices for what could happen next.")
@@ -171,8 +262,14 @@ async def llm_generate_story(request: StoryRequest):
     """ Call an LLM to generate a Choose-your-own-adventure style story. """
         
     logger.info(f"Generating story based on story request: {request}")
-    
-    prompt = build_story_prompt(request.prompt, request.history, request.choice)
+
+    # Create stage manager to get/create the stage plan:
+    stage_manager = StageManager(request.prompt.length, request.stage_plan)
+    stage_guidance = stage_manager.get_stage_guidance(len(request.history))
+    stage_plan = stage_manager.get_plan_as_strings()
+    logger.info(f"Story stage plan: {stage_plan}")
+
+    prompt = build_story_prompt(request.prompt, request.history, request.choice, stage_guidance)
     logger.info(f"Generated prompt for LLM: {prompt}")
     
     if settings.LLM_METHOD == "openai":
@@ -192,4 +289,4 @@ async def llm_generate_story(request: StoryRequest):
     except json.JSONDecodeError as exc:
         raise StoryGeneratorException(f"Invalid JSON from LLM: {str(exc)}")
     
-    return story["paragraph"], story["choices"]
+    return story["paragraph"], story["choices"], stage_plan
